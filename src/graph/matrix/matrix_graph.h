@@ -16,7 +16,9 @@ public:
     void remove_edge(ulong u, ulong v) override;
 
     [[nodiscard]] bool is_adjacent(ulong u, ulong v) const override;
-    linked_list<ulong>* get_adjacent(ulong u) const override;
+    [[nodiscard]] linked_list<ulong>* get_adjacent(ulong u) const override;
+
+    [[nodiscard]] int get_weight(ulong u, ulong v) const override;
 
     void print() override;
 };

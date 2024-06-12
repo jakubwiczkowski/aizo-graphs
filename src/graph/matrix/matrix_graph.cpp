@@ -48,3 +48,7 @@ linked_list<ulong> *matrix_graph::get_adjacent(ulong u) const {
     }
     return list;
 }
+
+int matrix_graph::get_weight(ulong u, ulong v) const {
+    return this->matrix[u][v];
+}

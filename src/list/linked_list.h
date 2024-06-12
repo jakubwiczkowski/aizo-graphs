@@ -18,6 +18,9 @@ public:
     void insert(T key);
     void remove(T key);
 
+    ulong get_size();
+    node<T>* get(ulong index);
+
     void print();
 };
 

@@ -23,6 +23,7 @@ public:
 
     [[nodiscard]] virtual bool is_adjacent(ulong u, ulong v) const;
     [[nodiscard]] virtual linked_list<ulong>* get_adjacent(ulong u) const;
+    [[nodiscard]] virtual int get_weight(ulong u, ulong v) const;
 
     virtual void print();
 };

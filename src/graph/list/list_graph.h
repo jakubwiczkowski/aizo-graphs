@@ -23,6 +23,8 @@ public:
 
     [[nodiscard]] linked_list<ulong> *get_adjacent(ulong u) const override;
 
+    [[nodiscard]] int get_weight(ulong u, ulong v) const override;
+
     void print() override;
 };
 

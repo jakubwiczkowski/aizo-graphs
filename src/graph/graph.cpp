@@ -21,6 +21,10 @@ ulong graph::get_vertices() const {
     return this->vertices;
 }
 
+int graph::get_weight(ulong u, ulong v) const {
+    return 0;
+}
+
 void graph::remove_edge(ulong u, ulong v) {
 
 }

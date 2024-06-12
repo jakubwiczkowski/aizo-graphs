@@ -71,3 +71,14 @@ void list_graph::print() {
         std::cout << std::endl;
     }
 }
+
+int list_graph::get_weight(ulong u, ulong v) const {
+    auto current = this->list[u]->get_head();
+    while (current != nullptr) {
+        if (current->get_key().get_vertex() == v) {
+            return current->get_key().get_weight();
+        }
+        current = current->get_next();
+    }
+    return 0;
+}

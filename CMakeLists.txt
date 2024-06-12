@@ -18,5 +18,10 @@ add_executable(aizo_graphs src/main.cpp
         src/menu/menu.cpp
         src/menu/menu.h
         src/graph/list/connection.cpp
-        src/graph/list/connection.h)
+        src/graph/list/connection.h
+        src/algorithm/algorithm.h
+        src/algorithm/mst/prim_algorithm.cpp
+        src/algorithm/mst/prim_algorithm.h
+        src/algorithm/mst/kruskal_algorithm.cpp
+        src/algorithm/mst/kruskal_algorithm.h)
 #target_link_options(aizo_sorting_exe PRIVATE -static-libgcc -static-libstdc++ -static)

@@ -49,6 +49,31 @@ void linked_list<T>::remove(T key) {
 }
 
 template<class T>
+ulong linked_list<T>::get_size() {
+    ulong size = 0;
+    node<T>* current = head;
+    while (current != nullptr) {
+        size++;
+        current = current->get_next();
+    }
+    return size;
+}
+
+template<class T>
+node<T> *linked_list<T>::get(ulong index) {
+    node<T>* current = head;
+    ulong i = 0;
+    while (current != nullptr) {
+        if (i == index) {
+            return current;
+        }
+        i++;
+        current = current->get_next();
+    }
+    return nullptr;
+}
+
+template<class T>
 void linked_list<T>::print() {
     node<T>* current = head;
     while (current != nullptr) {
