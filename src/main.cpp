@@ -4,6 +4,7 @@
 #include "graph/matrix/matrix_graph.h"
 #include "graph/list/list_graph.h"
 #include "algorithm/mst/prim_algorithm.h"
+#include "algorithm/shortest/dijkstra_algorithm.h"
 
 int main() {
     matrix_graph graph{5, 5};
@@ -39,5 +40,8 @@ int main() {
 
     prim_algorithm prims_algorithm{};
     prims_algorithm.run(list_graph, 0);
+
+    dijkstra_algorithm dijkstra_algorithm{};
+    dijkstra_algorithm.run(list_graph, 0);
     return 0;
 }
