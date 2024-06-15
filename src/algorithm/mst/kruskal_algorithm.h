@@ -8,6 +8,12 @@
 
 class kruskal_algorithm : public algorithm {
 public:
+    struct edge {
+        ulong src;
+        ulong dest;
+        int weight;
+    };
+
     void run(graph& graph, ulong start) override;
 
 private:

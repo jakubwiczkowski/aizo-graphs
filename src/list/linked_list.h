@@ -8,6 +8,7 @@
 template<class T>
 class linked_list {
     node<T>* head;
+    ulong size;
 
 public:
     linked_list();

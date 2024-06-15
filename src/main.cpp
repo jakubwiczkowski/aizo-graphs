@@ -1,47 +1,131 @@
 #include <iostream>
+#include <fstream>
 
 #include "list/linked_list.h"
 #include "graph/matrix/matrix_graph.h"
 #include "graph/list/list_graph.h"
 #include "algorithm/mst/prim_algorithm.h"
 #include "algorithm/shortest/dijkstra_algorithm.h"
+#include "algorithm/shortest/fordbellman_algorithm.h"
+#include "algorithm/mst/kruskal_algorithm.h"
+#include "menu/menu.h"
 
 int main() {
-    matrix_graph graph{5, 5};
-    graph.add_edge(0, 3, 1);
-    graph.add_edge(1, 2, 1);
-    graph.add_edge(1, 4, 2);
-    graph.add_edge(3, 0, -1);
+    menu main_menu(7);
 
-    auto adj = graph.get_adjacent(1);
-    adj->print();
-    delete adj;
+    matrix_graph* matrix_graph = nullptr;
+    list_graph* list_graph = nullptr;
 
-    std::cout << std::endl;
+    main_menu.add_option(0, "Wczytaj dane z pliku", [&matrix_graph, &list_graph] {
+        std::cout << "[?] Czy graf jest skierowany? (t/n): ";
+        char directed;
+        std::cin >> directed;
+        if (directed != 't' && directed != 'n') {
+            std::cout << "[!] Niepoprawna odpowiedz\n";
+            return;
+        }
+        bool is_directed = directed == 't';
+        std::cout << "[?] Podaj sciezke do pliku: ";
+        std::string path;
+        std::cin >> path;
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            std::cout << "[!] Nie udalo sie otworzyc pliku\n";
+            return;
+        }
 
-    graph.print();
+        if (matrix_graph != nullptr) {
+            delete matrix_graph;
+        }
+        if (list_graph != nullptr) {
+            delete list_graph;
+        }
 
-    list_graph list_graph{4, 5};
-    list_graph.add_edge(0, 1, 2);
-    list_graph.add_edge(1, 0, 2);
+        ulong vertices, edges;
+        file >> edges >> vertices;
 
-    list_graph.add_edge(1, 2, 5);
-    list_graph.add_edge(2, 1, 5);
+        matrix_graph = new class matrix_graph(vertices, directed ? edges : edges * 2);
+        list_graph = new class list_graph(vertices, directed ? edges : edges * 2);
 
-    list_graph.add_edge(2, 3, 3);
-    list_graph.add_edge(3, 2, 3);
+        for (int i = 0; i < edges; ++i) {
+            ulong u, v;
+            int weight;
+            file >> u >> v >> weight;
+            matrix_graph->add_edge(u, v, weight);
+            list_graph->add_edge(u, v, weight);
 
-    list_graph.add_edge(2, 0, 8);
-    list_graph.add_edge(0, 2, 8);
+            if (!is_directed) {
+                matrix_graph->add_edge(v, u, weight);
+                list_graph->add_edge(v, u, weight);
+            }
+        }
+    });
+    main_menu.add_option(1, "Wygeneruj graf losowo", [] {
+        std::cout << "Wygeneruj graf losowo\n";
+    });
+    main_menu.add_option(2, "Wyswietl graf listowo i macierzowo na ekranie", [&matrix_graph, &list_graph] {
+        if (matrix_graph == nullptr || list_graph == nullptr) {
+            std::cout << "[!] Brak wczytanego grafu\n";
+            return;
+        }
+        std::cout << "[#] Macierzowo:\n";
+        matrix_graph->print();
 
-    list_graph.add_edge(1, 3, 4);
-    list_graph.add_edge(3, 1, 4);
-    list_graph.print();
+        std::cout << "[#] Listowo:\n";
+        list_graph->print();
+    });
+    main_menu.add_option(3, "Algorytm Prima macierzowo i listowo", [&matrix_graph, &list_graph] {
+        if (matrix_graph == nullptr || list_graph == nullptr) {
+            std::cout << "[!] Brak wczytanego grafu\n";
+            return;
+        }
 
-    prim_algorithm prims_algorithm{};
-    prims_algorithm.run(list_graph, 0);
+        prim_algorithm prim{};
+        std::cout << "[#] Prim - macierzowo\n";
+        prim.run(*matrix_graph, 0);
 
-    dijkstra_algorithm dijkstra_algorithm{};
-    dijkstra_algorithm.run(list_graph, 0);
+        std::cout << "[#] Prim - listowo\n";
+        prim.run(*list_graph, 0);
+    });
+    main_menu.add_option(4, "Algorytm Kruskala macierzowo i listowo", [&matrix_graph, &list_graph] {
+        if (matrix_graph == nullptr || list_graph == nullptr) {
+            std::cout << "[!] Brak wczytanego grafu\n";
+            return;
+        }
+
+        kruskal_algorithm kruskal{};
+        std::cout << "[#] Kruskal - macierzowo\n";
+        kruskal.run(*matrix_graph, 0);
+
+        std::cout << "[#] Kruskal - listowo\n";
+        kruskal.run(*list_graph, 0);
+    });
+    main_menu.add_option(5, "Algorytm Dijkstry macierzowo i listowo", [&matrix_graph, &list_graph] {
+        if (matrix_graph == nullptr || list_graph == nullptr) {
+            std::cout << "[!] Brak wczytanego grafu\n";
+            return;
+        }
+
+        dijkstra_algorithm dijkstra{};
+        std::cout << "[#] Dijkstra - macierzowo\n";
+        dijkstra.run(*matrix_graph, 0);
+
+        std::cout << "[#] Dijkstra - listowo\n";
+        dijkstra.run(*list_graph, 0);
+    });
+    main_menu.add_option(6, "Algorytm Forda-Bellmana macierzowo i listowo", [&matrix_graph, &list_graph] {
+        if (matrix_graph == nullptr || list_graph == nullptr) {
+            std::cout << "[!] Brak wczytanego grafu\n";
+            return;
+        }
+
+        fordbellman_algorithm fordbellman{};
+        std::cout << "[#] Ford-Bellman - macierzowo\n";
+        fordbellman.run(*matrix_graph, 0);
+
+        std::cout << "[#] Ford-Bellman - listowo\n";
+        fordbellman.run(*list_graph, 0);
+    });
+    main_menu.open();
     return 0;
 }

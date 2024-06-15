@@ -20,7 +20,6 @@ list_graph::~list_graph() {
 
 void list_graph::add_edge(ulong u, ulong v, int weight) {
     this->list[u]->insert({v, weight});
-//    this->list[v]->insert({u, weight});
 }
 
 void list_graph::remove_edge(ulong u, ulong v) {

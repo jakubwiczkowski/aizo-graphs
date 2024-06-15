@@ -28,7 +28,7 @@ void prim_algorithm::run(graph &graph, ulong start) {
     }
 
     for (ulong i = 1; i < graph.get_vertices(); i++) {
-        std::cout << parent[i] << " -> " << i << " | " << graph.get_weight(i, parent[i]) << std::endl;
+        std::cout << parent[i] << " -> " << i << " | " << graph.get_weight(parent[i], i) << std::endl;
     }
 
     delete[] in_mst;
