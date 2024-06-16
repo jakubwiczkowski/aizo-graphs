@@ -46,17 +46,14 @@ void fordbellman_algorithm::run(graph &graph, ulong start) {
     }
 
     for (ulong i = 0; i < graph.get_vertices(); i++) {
-        std::cout << i << " -> " << dist[i] << std::endl;
-    }
-
-    for (ulong i = 0; i < graph.get_vertices(); i++) {
         std::cout << "Path from " << start << " to " << i << " is: ";
         ulong end = i;
         while (end != start) {
             std::cout << end << " <- ";
             end = path[end];
         }
-        std::cout << start << std::endl;
+        std::cout << start;
+        std::cout << " | Weight: " << dist[i] << std::endl;
     }
 
     delete[] path;

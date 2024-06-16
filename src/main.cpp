@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include "list/linked_list.h"
 #include "graph/matrix/matrix_graph.h"
@@ -82,10 +83,16 @@ int main() {
 
         prim_algorithm prim{};
         std::cout << "[#] Prim - macierzowo\n";
+        const auto start_time_matrix = std::chrono::high_resolution_clock::now();
         prim.run(*matrix_graph, 0);
+        const auto end_time_matrix = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Prim - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Prim - listowo\n";
+        const auto start_time_list = std::chrono::high_resolution_clock::now();
         prim.run(*list_graph, 0);
+        const auto end_time_list = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Prim - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
     main_menu.add_option(4, "Algorytm Kruskala macierzowo i listowo", [&matrix_graph, &list_graph] {
         if (matrix_graph == nullptr || list_graph == nullptr) {
@@ -95,10 +102,16 @@ int main() {
 
         kruskal_algorithm kruskal{};
         std::cout << "[#] Kruskal - macierzowo\n";
+        const auto start_time_matrix = std::chrono::high_resolution_clock::now();
         kruskal.run(*matrix_graph, 0);
+        const auto end_time_matrix = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Kruskal - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Kruskal - listowo\n";
+        const auto start_time_list = std::chrono::high_resolution_clock::now();
         kruskal.run(*list_graph, 0);
+        const auto end_time_list = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Kruskal - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
     main_menu.add_option(5, "Algorytm Dijkstry macierzowo i listowo", [&matrix_graph, &list_graph] {
         if (matrix_graph == nullptr || list_graph == nullptr) {
@@ -108,10 +121,16 @@ int main() {
 
         dijkstra_algorithm dijkstra{};
         std::cout << "[#] Dijkstra - macierzowo\n";
+        const auto start_time_matrix = std::chrono::high_resolution_clock::now();
         dijkstra.run(*matrix_graph, 0);
+        const auto end_time_matrix = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Dijkstra - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Dijkstra - listowo\n";
+        const auto start_time_list = std::chrono::high_resolution_clock::now();
         dijkstra.run(*list_graph, 0);
+        const auto end_time_list = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Dijkstra - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
     main_menu.add_option(6, "Algorytm Forda-Bellmana macierzowo i listowo", [&matrix_graph, &list_graph] {
         if (matrix_graph == nullptr || list_graph == nullptr) {
@@ -121,10 +140,16 @@ int main() {
 
         fordbellman_algorithm fordbellman{};
         std::cout << "[#] Ford-Bellman - macierzowo\n";
+        const auto start_time_matrix = std::chrono::high_resolution_clock::now();
         fordbellman.run(*matrix_graph, 0);
+        const auto end_time_matrix = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Ford-Bellman - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Ford-Bellman - listowo\n";
+        const auto start_time_list = std::chrono::high_resolution_clock::now();
         fordbellman.run(*list_graph, 0);
+        const auto end_time_list = std::chrono::high_resolution_clock::now();
+        std::cout << "[#] Ford-Bellman - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
     main_menu.open();
     return 0;

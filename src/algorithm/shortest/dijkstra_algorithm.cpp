@@ -5,9 +5,9 @@
 #include "dijkstra_algorithm.h"
 
 void dijkstra_algorithm::run(graph &graph, ulong start) {
-    auto* dist = new ulong[graph.get_vertices()];
-    bool* visited = new bool[graph.get_vertices()];
-    auto* path = new ulong[graph.get_vertices()];
+    auto *dist = new ulong[graph.get_vertices()];
+    bool *visited = new bool[graph.get_vertices()];
+    auto *path = new ulong[graph.get_vertices()];
 
     for (ulong i = 0; i < graph.get_vertices(); i++) {
         dist[i] = std::numeric_limits<ulong>::max();
@@ -21,7 +21,7 @@ void dijkstra_algorithm::run(graph &graph, ulong start) {
         ulong u = min_distance(dist, visited, graph.get_vertices());
         visited[u] = true;
 
-        auto* adj = graph.get_adjacent(u);
+        auto *adj = graph.get_adjacent(u);
         for (ulong j = 0; j < adj->get_size(); j++) {
             ulong v = adj->get(j)->get_key();
             ulong weight = graph.get_weight(u, v);
@@ -35,20 +35,15 @@ void dijkstra_algorithm::run(graph &graph, ulong start) {
     }
 
     for (ulong i = 0; i < graph.get_vertices(); i++) {
-        std::cout << i << " -> " << dist[i] << std::endl;
+        std::cout << "Path from " << start << " to " << i << " is: ";
+        ulong end = i;
+        while (end != start) {
+            std::cout << end << " <- ";
+            end = path[end];
+        }
+        std::cout << start;
+        std::cout << " | Weight: " << dist[i] << std::endl;
     }
-
-    // print out the shortest path from the start node to the end node
-     for (ulong i = 0; i < graph.get_vertices(); i++) {
-         std::cout << "Path from " << start << " to " << i << " is: ";
-         ulong end = i;
-         while (end != start) {
-             std::cout << end << " <- ";
-             end = path[end];
-         }
-         std::cout << start << std::endl;
-     }
-
 
     delete[] path;
     delete[] dist;
