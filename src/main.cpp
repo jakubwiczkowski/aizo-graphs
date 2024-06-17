@@ -12,12 +12,12 @@
 #include "menu/menu.h"
 
 int main() {
-    menu main_menu(7);
+    menu main_menu(9);
 
-    matrix_graph* matrix_graph = nullptr;
-    list_graph* list_graph = nullptr;
+    matrix_graph* loaded_matrix_graph = nullptr;
+    list_graph* loaded_list_graph = nullptr;
 
-    main_menu.add_option(0, "Wczytaj dane z pliku", [&matrix_graph, &list_graph] {
+    main_menu.add_option(0, "Wczytaj dane z pliku", [&loaded_matrix_graph, &loaded_list_graph] {
         std::cout << "[?] Czy graf jest skierowany? (t/n): ";
         char directed;
         std::cin >> directed;
@@ -35,48 +35,72 @@ int main() {
             return;
         }
 
-        if (matrix_graph != nullptr) {
-            delete matrix_graph;
+        if (loaded_matrix_graph != nullptr) {
+            delete loaded_matrix_graph;
         }
-        if (list_graph != nullptr) {
-            delete list_graph;
+        if (loaded_list_graph != nullptr) {
+            delete loaded_list_graph;
         }
 
-        ulong vertices, edges;
+        ushort vertices, edges;
         file >> edges >> vertices;
 
-        matrix_graph = new class matrix_graph(vertices, directed ? edges : edges * 2);
-        list_graph = new class list_graph(vertices, directed ? edges : edges * 2);
+        loaded_matrix_graph = new matrix_graph(vertices, (ushort) (directed ? edges : edges * 2));
+        loaded_list_graph = new list_graph(vertices, (ushort) (directed ? edges : edges * 2));
 
         for (int i = 0; i < edges; ++i) {
-            ulong u, v;
+            ushort u, v;
             int weight;
             file >> u >> v >> weight;
-            matrix_graph->add_edge(u, v, weight);
-            list_graph->add_edge(u, v, weight);
+            loaded_matrix_graph->add_edge(u, v, weight);
+            loaded_list_graph->add_edge(u, v, weight);
 
             if (!is_directed) {
-                matrix_graph->add_edge(v, u, weight);
-                list_graph->add_edge(v, u, weight);
+                loaded_matrix_graph->add_edge(v, u, weight);
+                loaded_list_graph->add_edge(v, u, weight);
             }
         }
     });
-    main_menu.add_option(1, "Wygeneruj graf losowo", [] {
-        std::cout << "Wygeneruj graf losowo\n";
+    main_menu.add_option(1, "Wygeneruj graf losowo", [&loaded_matrix_graph, &loaded_list_graph] {
+        double density;
+        ushort vertices;
+        bool is_directed;
+        std::cout << "[?] Podaj ilosc wierzcholkow: ";
+        std::cin >> vertices;
+        std::cout << "[?] Podaj gestosc grafu (0-1): ";
+        std::cin >> density;
+        std::cout << "[?] Czy graf jest skierowany? (t/n): ";
+        char directed;
+        std::cin >> directed;
+        if (directed != 't' && directed != 'n') {
+            std::cout << "[!] Niepoprawna odpowiedz\n";
+            return;
+        }
+        is_directed = directed == 't';
+
+        if (loaded_matrix_graph != nullptr) {
+            delete loaded_matrix_graph;
+        }
+        if (loaded_list_graph != nullptr) {
+            delete loaded_list_graph;
+        }
+
+        loaded_matrix_graph = new matrix_graph(vertices, density, is_directed);
+        loaded_list_graph = new list_graph(*loaded_matrix_graph);
     });
-    main_menu.add_option(2, "Wyswietl graf listowo i macierzowo na ekranie", [&matrix_graph, &list_graph] {
-        if (matrix_graph == nullptr || list_graph == nullptr) {
+    main_menu.add_option(2, "Wyswietl graf listowo i macierzowo na ekranie", [&loaded_matrix_graph, &loaded_list_graph] {
+        if (loaded_matrix_graph == nullptr || loaded_list_graph == nullptr) {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
         std::cout << "[#] Macierzowo:\n";
-        matrix_graph->print();
+        loaded_matrix_graph->print();
 
         std::cout << "[#] Listowo:\n";
-        list_graph->print();
+        loaded_list_graph->print();
     });
-    main_menu.add_option(3, "Algorytm Prima macierzowo i listowo", [&matrix_graph, &list_graph] {
-        if (matrix_graph == nullptr || list_graph == nullptr) {
+    main_menu.add_option(3, "Algorytm Prima macierzowo i listowo", [&loaded_matrix_graph, &loaded_list_graph] {
+        if (loaded_matrix_graph == nullptr || loaded_list_graph == nullptr) {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
@@ -84,18 +108,18 @@ int main() {
         prim_algorithm prim{};
         std::cout << "[#] Prim - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        prim.run(*matrix_graph, 0);
+        prim.run(*loaded_matrix_graph, 0, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Prim - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Prim - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        prim.run(*list_graph, 0);
+        prim.run(*loaded_list_graph, 0, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Prim - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
-    main_menu.add_option(4, "Algorytm Kruskala macierzowo i listowo", [&matrix_graph, &list_graph] {
-        if (matrix_graph == nullptr || list_graph == nullptr) {
+    main_menu.add_option(4, "Algorytm Kruskala macierzowo i listowo", [&loaded_matrix_graph, &loaded_list_graph] {
+        if (loaded_matrix_graph == nullptr || loaded_list_graph == nullptr) {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
@@ -103,18 +127,18 @@ int main() {
         kruskal_algorithm kruskal{};
         std::cout << "[#] Kruskal - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        kruskal.run(*matrix_graph, 0);
+        kruskal.run(*loaded_matrix_graph, 0, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Kruskal - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Kruskal - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        kruskal.run(*list_graph, 0);
+        kruskal.run(*loaded_list_graph, 0, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Kruskal - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
-    main_menu.add_option(5, "Algorytm Dijkstry macierzowo i listowo", [&matrix_graph, &list_graph] {
-        if (matrix_graph == nullptr || list_graph == nullptr) {
+    main_menu.add_option(5, "Algorytm Dijkstry macierzowo i listowo", [&loaded_matrix_graph, &loaded_list_graph] {
+        if (loaded_matrix_graph == nullptr || loaded_list_graph == nullptr) {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
@@ -122,18 +146,18 @@ int main() {
         dijkstra_algorithm dijkstra{};
         std::cout << "[#] Dijkstra - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        dijkstra.run(*matrix_graph, 0);
+        dijkstra.run(*loaded_matrix_graph, 0, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Dijkstra - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Dijkstra - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        dijkstra.run(*list_graph, 0);
+        dijkstra.run(*loaded_list_graph, 0, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Dijkstra - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
-    main_menu.add_option(6, "Algorytm Forda-Bellmana macierzowo i listowo", [&matrix_graph, &list_graph] {
-        if (matrix_graph == nullptr || list_graph == nullptr) {
+    main_menu.add_option(6, "Algorytm Forda-Bellmana macierzowo i listowo", [&loaded_matrix_graph, &loaded_list_graph] {
+        if (loaded_matrix_graph == nullptr || loaded_list_graph == nullptr) {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
@@ -141,16 +165,128 @@ int main() {
         fordbellman_algorithm fordbellman{};
         std::cout << "[#] Ford-Bellman - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        fordbellman.run(*matrix_graph, 0);
+        fordbellman.run(*loaded_matrix_graph, 0, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Ford-Bellman - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Ford-Bellman - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        fordbellman.run(*list_graph, 0);
+        fordbellman.run(*loaded_list_graph, 0, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Ford-Bellman - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
+    main_menu.add_option(7, "Obliczenia do wykresów", [] {
+        ushort repetitions = 50;
+        ushort sizes[] = {10, 20, 50, 100, 200, 500, 1000};
+        double densities[] = {0.25, 0.5, 0.99};
+
+        std::ofstream file("results.csv");
+
+        // ALGORYTMY MST
+        prim_algorithm prim{};
+        kruskal_algorithm kruskal{};
+        for (ushort size : sizes) {
+            std::cout << "[#] Size: " << size << std::endl;
+            for (double density : densities) {
+                std::cout << " ↳ Density: " << density << std::endl;
+                for (ushort n = 0; n < repetitions; n++) {
+                    for (int type : {0, 1}) {
+                        auto* matrix = new matrix_graph(size, density, false);
+                        auto* list = new list_graph(*matrix);
+
+                        if (type == 0) {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            prim.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            prim.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
+                        } else {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
+                        }
+
+                        delete list;
+                        delete matrix;
+                    }
+                }
+            }
+        }
+
+        // ALGORYTMY SHORTEST PATH
+//        dijkstra_algorithm dijkstra{};
+//        fordbellman_algorithm fordbellman{};
+//        for (ushort size : sizes) {
+//            std::cout << "[#] Size: " << size << std::endl;
+//            for (double density : densities) {
+//                std::cout << " ↳ Density: " << density << std::endl;
+//                for (ushort n = 0; n < repetitions; n++) {
+//                    for (int type : {0, 1}) {
+//                        auto* matrix = new matrix_graph(size, density, false);
+//                        auto* list = new list_graph(*matrix);
+//
+//                        if (type == 0) {
+//                            auto start_matrix = std::chrono::high_resolution_clock::now();
+//                            dijkstra.run(*matrix, 0, false);
+//                            auto end_matrix = std::chrono::high_resolution_clock::now();
+//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+//
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (matrix): " << duration_matrix << "ns" << std::endl;
+//
+//                            auto start_list = std::chrono::high_resolution_clock::now();
+//                            dijkstra.run(*list, 0, false);
+//                            auto end_list = std::chrono::high_resolution_clock::now();
+//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+//
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (list): " << duration_list << "ns" << std::endl;
+//                        } else {
+//                            auto start_matrix = std::chrono::high_resolution_clock::now();
+//                            fordbellman.run(*matrix, 0, false);
+//                            auto end_matrix = std::chrono::high_resolution_clock::now();
+//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+//
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (matrix): " << duration_matrix << "ns" << std::endl;
+//
+//                            auto start_list = std::chrono::high_resolution_clock::now();
+//                            fordbellman.run(*list, 0, false);
+//                            auto end_list = std::chrono::high_resolution_clock::now();
+//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+//
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (list): " << duration_list << "ns" << std::endl;
+//                        }
+//
+//                        delete list;
+//                        delete matrix;
+//                    }
+//                }
+//            }
+//        }
+    });
+    main_menu.add_option(8, "Zakoncz", [&main_menu] {
+        std::cout << "[#] Koniec programu\n";
+        main_menu.close();
+    });
     main_menu.open();
+
+    delete loaded_matrix_graph;
+    delete loaded_list_graph;
     return 0;
 }

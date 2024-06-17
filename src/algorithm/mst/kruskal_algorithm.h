@@ -9,16 +9,16 @@
 class kruskal_algorithm : public algorithm {
 public:
     struct edge {
-        ulong src;
-        ulong dest;
+        ushort src;
+        ushort dest;
         int weight;
     };
 
-    void run(graph& graph, ulong start) override;
+    void run(graph& graph, ushort start, bool print) override;
 
 private:
-    ulong find(ulong* parent, ulong i);
-    void union_set(ulong* parent, ulong x, ulong y);
+    ushort find(ushort* parent, ushort i);
+    void union_set(ushort* parent, ushort x, ushort y);
 };
 
 

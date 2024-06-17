@@ -8,10 +8,10 @@
 
 class dijkstra_algorithm : public algorithm {
 public:
-    void run(graph& graph, ulong start) override;
+    void run(graph& graph, ushort start, bool print) override;
 
 private:
-    ulong min_distance(ulong* dist, bool* visited, ulong vertices);
+    ushort min_distance(ushort* dist, bool* visited, ushort vertices);
 };
 
 

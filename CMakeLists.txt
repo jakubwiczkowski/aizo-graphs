@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(aizo_graphs)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 add_executable(aizo_graphs src/main.cpp
         src/list/linked_list.h
@@ -27,5 +28,7 @@ add_executable(aizo_graphs src/main.cpp
         src/algorithm/shortest/dijkstra_algorithm.cpp
         src/algorithm/shortest/dijkstra_algorithm.h
         src/algorithm/shortest/fordbellman_algorithm.cpp
-        src/algorithm/shortest/fordbellman_algorithm.h)
-#target_link_options(aizo_sorting_exe PRIVATE -static-libgcc -static-libstdc++ -static)
+        src/algorithm/shortest/fordbellman_algorithm.h
+        src/list/pair.cpp
+        src/list/pair.h)
+#target_link_options(aizo_graphs PRIVATE -static-libgcc -static-libstdc++ -static)

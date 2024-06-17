@@ -6,24 +6,27 @@
 #include "../graph.h"
 #include "../../list/linked_list.h"
 #include "connection.h"
+#include "../matrix/matrix_graph.h"
 
 class list_graph : public graph {
     linked_list<connection> **list;
 
 public:
-    list_graph(ulong vertices, ulong edges);
+    list_graph(ushort vertices, ushort edges);
+    list_graph(ushort vertices, double fill, bool is_directed = false);
+    list_graph(matrix_graph& matrix_graph);
 
     ~list_graph();
 
-    void add_edge(ulong u, ulong v, int weight) override;
+    void add_edge(ushort u, ushort v, int weight) override;
 
-    void remove_edge(ulong u, ulong v) override;
+    void remove_edge(ushort u, ushort v) override;
 
-    [[nodiscard]] bool is_adjacent(ulong u, ulong v) const override;
+    [[nodiscard]] bool is_adjacent(ushort u, ushort v) override;
 
-    [[nodiscard]] linked_list<ulong> *get_adjacent(ulong u) const override;
+    [[nodiscard]] std::vector<ushort> get_adjacent(ushort u) override;
 
-    [[nodiscard]] int get_weight(ulong u, ulong v) const override;
+    [[nodiscard]] int get_weight(ushort u, ushort v) override;
 
     void print() override;
 };

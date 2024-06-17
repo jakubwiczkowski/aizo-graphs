@@ -3,11 +3,25 @@
 #include <iostream>
 #include "list_graph.h"
 
-list_graph::list_graph(ulong vertices, ulong edges) : graph(vertices, edges) {
+list_graph::list_graph(ushort vertices, ushort edges) : graph(vertices, edges) {
     this->list = new linked_list<connection>*[vertices];
 
     for (int idx = 0; idx < vertices; idx++) {
         this->list[idx] = new linked_list<connection>();
+    }
+}
+
+list_graph::list_graph(ushort vertices, double fill, bool is_directed) : graph(vertices, fill, is_directed) {
+
+}
+
+list_graph::list_graph(matrix_graph &matrix_graph) : list_graph(matrix_graph.get_vertices(), matrix_graph.get_edges()) {
+    for (int i = 0; i < this->get_vertices(); i++) {
+        for (int j = 0; j < this->get_vertices(); j++) {
+            if (matrix_graph.is_adjacent(i, j)) {
+                this->add_edge(i, j, matrix_graph.get_weight(i, j));
+            }
+        }
     }
 }
 
@@ -18,11 +32,11 @@ list_graph::~list_graph() {
     delete[] this->list;
 }
 
-void list_graph::add_edge(ulong u, ulong v, int weight) {
+void list_graph::add_edge(ushort u, ushort v, int weight) {
     this->list[u]->insert({v, weight});
 }
 
-void list_graph::remove_edge(ulong u, ulong v) {
+void list_graph::remove_edge(ushort u, ushort v) {
     auto current = this->list[u]->get_head();
     while (current != nullptr) {
         if (current->get_key().get_vertex() == v) {
@@ -42,7 +56,7 @@ void list_graph::remove_edge(ulong u, ulong v) {
     }
 }
 
-bool list_graph::is_adjacent(ulong u, ulong v) const {
+bool list_graph::is_adjacent(ushort u, ushort v) {
     auto current = this->list[u]->get_head();
     while (current != nullptr) {
         if (current->get_key().get_vertex() == v) {
@@ -53,14 +67,21 @@ bool list_graph::is_adjacent(ulong u, ulong v) const {
     return false;
 }
 
-linked_list<ulong> *list_graph::get_adjacent(ulong u) const {
-    auto* adjacent = new linked_list<ulong>();
+std::vector<ushort> list_graph::get_adjacent(ushort u) {
+    std::vector<ushort> adjacent;
     auto current = this->list[u]->get_head();
     while (current != nullptr) {
-        adjacent->insert(current->get_key().get_vertex());
+        adjacent.emplace_back(current->get_key().get_vertex());
         current = current->get_next();
     }
     return adjacent;
+//    auto* adjacent = new linked_list<ushort>();
+//    auto current = this->list[u]->get_head();
+//    while (current != nullptr) {
+//        adjacent->insert(current->get_key().get_vertex());
+//        current = current->get_next();
+//    }
+//    return adjacent;
 }
 
 void list_graph::print() {
@@ -71,7 +92,7 @@ void list_graph::print() {
     }
 }
 
-int list_graph::get_weight(ulong u, ulong v) const {
+int list_graph::get_weight(ushort u, ushort v) {
     auto current = this->list[u]->get_head();
     while (current != nullptr) {
         if (current->get_key().get_vertex() == v) {

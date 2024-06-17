@@ -8,10 +8,10 @@
 
 class prim_algorithm : public algorithm {
 public:
-    void run(graph& graph, ulong start) override;
+    void run(graph& graph, ushort start, bool print) override;
 
 private:
-    ulong min_key(ulong* key, ulong* in_mst, ulong vertices);
+    ushort min_key(ushort* key, ushort* in_mst, ushort vertices);
 };
 
 

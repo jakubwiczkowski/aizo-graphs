@@ -8,7 +8,7 @@
 
 class fordbellman_algorithm : public algorithm {
 public:
-    void run(graph &graph, ulong start) override;
+    void run(graph &graph, ushort start, bool print) override;
 };
 
 

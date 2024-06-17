@@ -3,27 +3,28 @@
 #ifndef AIZO_GRAPHS_GRAPH_H
 #define AIZO_GRAPHS_GRAPH_H
 
+#include <vector>
 #include "../list/linked_list.h"
 
-typedef unsigned long ulong;
+typedef unsigned short ushort;
 
 class graph {
-    ulong vertices;
-    ulong edges;
+    ushort vertices;
+    ushort edges;
 
 public:
-    graph(ulong vertices, ulong edges);
-    graph(ulong vertices, double fill);
+    graph(ushort vertices, ushort edges);
+    graph(ushort vertices, double fill, bool is_directed = false);
 
-    virtual void add_edge(ulong u, ulong v, int weight);
-    virtual void remove_edge(ulong u, ulong v);
+    virtual void add_edge(ushort u, ushort v, int weight);
+    virtual void remove_edge(ushort u, ushort v);
 
-    [[nodiscard]] ulong get_vertices() const;
-    [[nodiscard]] ulong get_edges() const;
+    [[nodiscard]] ushort get_vertices() const;
+    [[nodiscard]] ushort get_edges() const;
 
-    [[nodiscard]] virtual bool is_adjacent(ulong u, ulong v) const;
-    [[nodiscard]] virtual linked_list<ulong>* get_adjacent(ulong u) const;
-    [[nodiscard]] virtual int get_weight(ulong u, ulong v) const;
+    [[nodiscard]] virtual bool is_adjacent(ushort u, ushort v);
+    [[nodiscard]] virtual std::vector<ushort> get_adjacent(ushort u);
+    [[nodiscard]] virtual int get_weight(ushort u, ushort v);
 
     virtual void print();
 };

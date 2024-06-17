@@ -2,39 +2,39 @@
 
 #include "graph.h"
 
-graph::graph(ulong vertices, ulong edges) {
+graph::graph(ushort vertices, ushort edges) {
     this->vertices = vertices;
     this->edges = edges;
 }
 
-graph::graph(ulong vertices, double fill): graph(vertices, static_cast<ulong>(vertices * (vertices - 1) * fill / 2)) {}
+graph::graph(ushort vertices, double fill, bool is_directed): graph(vertices,static_cast<ushort>(vertices * (vertices - 1) * fill / (is_directed ? 2 : 1))) {}
 
-bool graph::is_adjacent(ulong u, ulong v) const {
+bool graph::is_adjacent(ushort u, ushort v) {
     return false;
 }
 
-ulong graph::get_edges() const {
+ushort graph::get_edges() const {
     return this->edges;
 }
 
-ulong graph::get_vertices() const {
+ushort graph::get_vertices() const {
     return this->vertices;
 }
 
-int graph::get_weight(ulong u, ulong v) const {
+int graph::get_weight(ushort u, ushort v) {
     return 0;
 }
 
-void graph::remove_edge(ulong u, ulong v) {
+void graph::remove_edge(ushort u, ushort v) {
 
 }
 
-void graph::add_edge(ulong u, ulong v, int weight) {
+void graph::add_edge(ushort u, ushort v, int weight) {
 
 }
 
-linked_list<ulong> *graph::get_adjacent(ulong u) const {
-    return nullptr;
+std::vector<ushort> graph::get_adjacent(ushort u) {
+    return {};
 }
 
 void graph::print() {

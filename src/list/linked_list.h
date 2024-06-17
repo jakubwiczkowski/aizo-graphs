@@ -8,7 +8,7 @@
 template<class T>
 class linked_list {
     node<T>* head;
-    ulong size = 0;
+    ushort size = 0;
 
 public:
     linked_list();
@@ -19,8 +19,8 @@ public:
     void insert(T key);
     void remove(T key);
 
-    ulong get_size();
-    node<T>* get(ulong index);
+    ushort get_size();
+    node<T>* get(ushort index);
 
     void print();
 };
@@ -28,5 +28,6 @@ public:
 template class linked_list<int>;
 template class linked_list<unsigned long>;
 template class linked_list<connection>;
+template class linked_list<pair<ushort, ushort>>;
 
 #endif //AIZO_GRAPHS_LINKED_LIST_H

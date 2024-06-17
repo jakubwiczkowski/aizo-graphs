@@ -24,9 +24,9 @@ node<T>* linked_list<T>::get_head() {
 
 template<class T>
 void linked_list<T>::insert(T key) {
-    auto* new_node = new node<T>(key);
-    new_node->set_next(head);
-    head = new_node;
+    node<T>* new_node = new node<T>(key);
+    new_node->set_next(this->head);
+    this->head = new_node;
     this->size++;
 }
 
@@ -51,14 +51,14 @@ void linked_list<T>::remove(T key) {
 }
 
 template<class T>
-ulong linked_list<T>::get_size() {
+ushort linked_list<T>::get_size() {
     return this->size;
 }
 
 template<class T>
-node<T> *linked_list<T>::get(ulong index) {
+node<T> *linked_list<T>::get(ushort index) {
     node<T>* current = head;
-    ulong i = 0;
+    ushort i = 0;
     while (current != nullptr) {
         if (i == index) {
             return current;

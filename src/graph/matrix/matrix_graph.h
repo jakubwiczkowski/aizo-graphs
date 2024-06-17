@@ -9,16 +9,17 @@
 class matrix_graph : public graph {
     int** matrix;
 public:
-    matrix_graph(ulong vertices, ulong edges);
+    matrix_graph(ushort vertices, double fill, bool is_directed = false);
+    matrix_graph(ushort vertices, ushort edges);
     ~matrix_graph();
 
-    void add_edge(ulong u, ulong v, int weight) override;
-    void remove_edge(ulong u, ulong v) override;
+    void add_edge(ushort u, ushort v, int weight) override;
+    void remove_edge(ushort u, ushort v) override;
 
-    [[nodiscard]] bool is_adjacent(ulong u, ulong v) const override;
-    [[nodiscard]] linked_list<ulong>* get_adjacent(ulong u) const override;
+    [[nodiscard]] bool is_adjacent(ushort u, ushort v) override;
+    [[nodiscard]] std::vector<ushort> get_adjacent(ushort u) override;
 
-    [[nodiscard]] int get_weight(ulong u, ulong v) const override;
+    [[nodiscard]] int get_weight(ushort u, ushort v) override;
 
     void print() override;
 };

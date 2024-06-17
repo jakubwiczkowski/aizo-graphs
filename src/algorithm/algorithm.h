@@ -8,7 +8,7 @@
 
 class algorithm {
 public:
-    virtual void run(graph& graph, ulong start) = 0;
+    virtual void run(graph& graph, ushort start, bool print) = 0;
 };
 
 

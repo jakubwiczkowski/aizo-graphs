@@ -16,16 +16,6 @@ node<T> *node<T>::get_next() {
 }
 
 template<class T>
-node<T> *node<T>::get_previous() {
-    return this->previous;
-}
-
-template<class T>
 void node<T>::set_next(node<T>* next) {
     this->next = next;
-}
-
-template<class T>
-void node<T>::set_previous(node<T>* previous) {
-    this->previous = previous;
 }
