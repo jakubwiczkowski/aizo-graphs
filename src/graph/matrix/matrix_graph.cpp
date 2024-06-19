@@ -12,7 +12,6 @@ matrix_graph::matrix_graph(ushort vertices, ushort edges) : graph(vertices, edge
 }
 
 matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) : matrix_graph(vertices,static_cast<ushort>(vertices * (vertices - 1) * fill / (!is_directed ? 2 : 1))) {
-//    std::cout << this->get_vertices() << " / " << this->get_edges() << std::endl;
     ushort added_edges = 0;
     static std::random_device r;
     static std::default_random_engine e1(r());
@@ -26,7 +25,6 @@ matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) : mat
             }
         }
     }
-//    std::cout << "Possible edges: " << possible_edges_list->get_size() << std::endl;
 
     // MST
     for (ushort i = 1; i < this->get_vertices(); ++i) {
@@ -41,22 +39,12 @@ matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) : mat
     }
 
     while(added_edges < this->get_edges()) {
-        // get first two available edges
         std::uniform_int_distribution<ushort> uniform_dist(0, possible_edges.size() - 1);
 
         ushort idx = uniform_dist(e1);
 
         ushort u = possible_edges[idx].first;
         ushort v = possible_edges[idx].second;
-
-//        if (this->is_adjacent(u, v)) {
-//            possible_edges_list->remove(pair(u, v));
-//            if (!is_directed && this->is_adjacent(v, u)) {
-//                possible_edges_list->remove(pair(v, u));
-//                continue;
-//            }
-//            continue;
-//        }
 
         if (u != v) {
             int weight = uniform_dist_weight(e1);

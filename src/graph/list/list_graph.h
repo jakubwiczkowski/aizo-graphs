@@ -9,6 +9,7 @@
 #include "../matrix/matrix_graph.h"
 
 class list_graph : public graph {
+    // Lista list sąsiedztwa
     linked_list<connection> **list;
 
 public:

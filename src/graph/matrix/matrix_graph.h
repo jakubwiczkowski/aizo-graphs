@@ -7,6 +7,7 @@
 #include "../graph.h"
 
 class matrix_graph : public graph {
+    // Macierz
     int** matrix;
 public:
     matrix_graph(ushort vertices, double fill, bool is_directed = false);

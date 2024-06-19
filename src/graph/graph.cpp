@@ -16,7 +16,3 @@ ushort graph::get_edges() const {
 ushort graph::get_vertices() const {
     return this->vertices;
 }
-
-std::vector<ushort> graph::get_adjacent(ushort u) {
-    return this->adjacents[u];
-}

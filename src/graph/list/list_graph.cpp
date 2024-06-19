@@ -75,13 +75,6 @@ std::vector<ushort> list_graph::get_adjacent(ushort u) {
         current = current->get_next();
     }
     return adjacent;
-//    auto* adjacent = new linked_list<ushort>();
-//    auto current = this->list[u]->get_head();
-//    while (current != nullptr) {
-//        adjacent->insert(current->get_key().get_vertex());
-//        current = current->get_next();
-//    }
-//    return adjacent;
 }
 
 void list_graph::print() {
