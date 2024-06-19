@@ -6,11 +6,8 @@
 
 void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
     ushort vertices = graph.get_vertices();
-    ushort edges = graph.get_edges();
     edge result[vertices];
 
-    ushort i = 0;
-    ushort e = 0;
 
     std::vector<edge> edge_list;
 
@@ -24,15 +21,6 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
                 edge_list.push_back({v, u, weight});
             }
         }
-//        for (ushort j = 0; j < adj.size(); j++) {
-//            ushort u = adj[j];
-//            int weight = graph.get_weight(u, v);
-//
-//            edge_array[e].src = v;
-//            edge_array[e].dest = u;
-//            edge_array[e].weight = weight;
-//            e++;
-//        }
     }
 
     std::sort(edge_list.begin(), edge_list.end(), [](edge a, edge b) {
@@ -45,8 +33,8 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
         parent[v] = v;
     }
 
-    i = 0;
-    e = 0;
+    ushort i = 0;
+    ushort e = 0;
 
     while (i < vertices - 1) {
         edge next_edge = edge_list[e++];
