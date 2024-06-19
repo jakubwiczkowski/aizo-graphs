@@ -176,109 +176,143 @@ int main() {
         std::cout << "[#] Ford-Bellman - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
     main_menu.add_option(7, "Obliczenia do wykresów", [] {
-        ushort repetitions = 50;
+        ushort repetitions = 25;
         ushort sizes[] = {10, 20, 50, 100, 200, 500, 1000};
         double densities[] = {0.25, 0.5, 0.99};
 
-        std::ofstream file("results.csv");
+        std::ofstream file("results_mst.csv", std::ios::app);
+        std::ofstream file_sp("results_sp.csv", std::ios::app);
 
         // ALGORYTMY MST
-        prim_algorithm prim{};
-        kruskal_algorithm kruskal{};
-        for (ushort size : sizes) {
-            std::cout << "[#] Size: " << size << std::endl;
-            for (double density : densities) {
-                std::cout << " ↳ Density: " << density << std::endl;
-                for (ushort n = 0; n < repetitions; n++) {
-                    for (int type : {0, 1}) {
-                        auto* matrix = new matrix_graph(size, density, false);
-                        auto* list = new list_graph(*matrix);
-
-                        if (type == 0) {
-                            auto start_matrix = std::chrono::high_resolution_clock::now();
-                            prim.run(*matrix, 0, false);
-                            auto end_matrix = std::chrono::high_resolution_clock::now();
-                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
-
-                            auto start_list = std::chrono::high_resolution_clock::now();
-                            prim.run(*list, 0, false);
-                            auto end_list = std::chrono::high_resolution_clock::now();
-                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
-                        } else {
-                            auto start_matrix = std::chrono::high_resolution_clock::now();
-                            kruskal.run(*matrix, 0, false);
-                            auto end_matrix = std::chrono::high_resolution_clock::now();
-                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
-
-                            auto start_list = std::chrono::high_resolution_clock::now();
-                            kruskal.run(*list, 0, false);
-                            auto end_list = std::chrono::high_resolution_clock::now();
-                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
-                        }
-
-                        delete list;
-                        delete matrix;
-                    }
-                }
-            }
-        }
-
-        // ALGORYTMY SHORTEST PATH
-//        dijkstra_algorithm dijkstra{};
-//        fordbellman_algorithm fordbellman{};
+//        prim_algorithm prim{};
+//        kruskal_algorithm kruskal{};
 //        for (ushort size : sizes) {
 //            std::cout << "[#] Size: " << size << std::endl;
+//            file << size << ",";
 //            for (double density : densities) {
 //                std::cout << " ↳ Density: " << density << std::endl;
+//                file << density << ",";
+//                long sum_prim_matrix = 0;
+//                long sum_prim_list = 0;
+//                long sum_kruskal_matrix = 0;
+//                long sum_kruskal_list = 0;
 //                for (ushort n = 0; n < repetitions; n++) {
+//                    auto* matrix = new matrix_graph(size, density, false);
+//                    auto* list = new list_graph(*matrix);
 //                    for (int type : {0, 1}) {
-//                        auto* matrix = new matrix_graph(size, density, false);
-//                        auto* list = new list_graph(*matrix);
 //
 //                        if (type == 0) {
 //                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            dijkstra.run(*matrix, 0, false);
+//                            prim.run(*matrix, 0, false);
 //                            auto end_matrix = std::chrono::high_resolution_clock::now();
 //                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
 //
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (matrix): " << duration_matrix << "ns" << std::endl;
+//                            sum_prim_matrix += duration_matrix;
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
 //
 //                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            dijkstra.run(*list, 0, false);
+//                            prim.run(*list, 0, false);
 //                            auto end_list = std::chrono::high_resolution_clock::now();
 //                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 //
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (list): " << duration_list << "ns" << std::endl;
+//                            sum_prim_list += duration_list;
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
 //                        } else {
 //                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            fordbellman.run(*matrix, 0, false);
+//                            kruskal.run(*matrix, 0, false);
 //                            auto end_matrix = std::chrono::high_resolution_clock::now();
 //                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
 //
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (matrix): " << duration_matrix << "ns" << std::endl;
+//                            sum_kruskal_matrix += duration_matrix;
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
 //
 //                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            fordbellman.run(*list, 0, false);
+//                            kruskal.run(*list, 0, false);
 //                            auto end_list = std::chrono::high_resolution_clock::now();
 //                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 //
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (list): " << duration_list << "ns" << std::endl;
+//                            sum_kruskal_list += duration_list;
+//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
 //                        }
-//
-//                        delete list;
-//                        delete matrix;
 //                    }
+//                    delete list;
+//                    delete matrix;
 //                }
+//                file << sum_prim_matrix / repetitions << "," << sum_prim_list / repetitions << "," << sum_kruskal_matrix / repetitions << "," << sum_kruskal_list / repetitions << "\n";
+//                std::cout << " | Prim (matrix)    avg.: " << sum_prim_matrix / repetitions << "ns\n";
+//                std::cout << " | Prim (list)      avg.: " << sum_prim_list / repetitions << "ns\n";
+//                std::cout << " | Kruskal (matrix) avg.: " << sum_kruskal_matrix / repetitions << "ns\n";
+//                std::cout << " ↳ Kruskal (list)   avg.: " << sum_kruskal_list / repetitions << "ns\n";
 //            }
 //        }
+
+        file.close();
+
+        // ALGORYTMY SHORTEST PATH
+        dijkstra_algorithm dijkstra{};
+        fordbellman_algorithm fordbellman{};
+        for (ushort size : sizes) {
+            std::cout << "[#] Size: " << size << std::endl;
+            file_sp << size << ",";
+            for (double density : densities) {
+                std::cout << " ↳ Density: " << density << std::endl;
+                file_sp << density << ",";
+                long sum_dijkstra_matrix = 0;
+                long sum_dijkstra_list = 0;
+                long sum_fordbellman_matrix = 0;
+                long sum_fordbellman_list = 0;
+                for (ushort n = 0; n < repetitions; n++) {
+                    auto* matrix = new matrix_graph(size, density, false);
+                    auto* list = new list_graph(*matrix);
+                    for (int type : {0, 1}) {
+
+                        if (type == 0) {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            dijkstra.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_dijkstra_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            dijkstra.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_dijkstra_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (list): " << duration_list << "ns" << std::endl;
+                        } else {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            fordbellman.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_fordbellman_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            fordbellman.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_fordbellman_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (list): " << duration_list << "ns" << std::endl;
+                        }
+
+                    }
+                    delete list;
+                    delete matrix;
+                }
+                file_sp << sum_dijkstra_matrix / repetitions << "," << sum_dijkstra_list / repetitions << "," << sum_fordbellman_matrix / repetitions << "," << sum_fordbellman_list / repetitions << "\n";
+                std::cout << " | Dijkstra (matrix)     avg.: " << sum_dijkstra_matrix / repetitions << "ns\n";
+                std::cout << " | Dijkstra (list)       avg.: " << sum_dijkstra_list / repetitions << "ns\n";
+                std::cout << " | Ford-Bellman (matrix) avg.: " << sum_fordbellman_matrix / repetitions << "ns\n";
+                std::cout << " ↳ Ford-Bellman (list)   avg.: " << sum_fordbellman_list / repetitions << "ns\n";
+            }
+        }
+
+        file_sp.close();
     });
     main_menu.add_option(8, "Zakoncz", [&main_menu] {
         std::cout << "[#] Koniec programu\n";

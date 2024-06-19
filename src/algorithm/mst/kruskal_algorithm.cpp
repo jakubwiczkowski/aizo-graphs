@@ -12,17 +12,16 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
     ushort i = 0;
     ushort e = 0;
 
-    auto* edge_array = new edge[edges];
+    std::vector<edge> edge_list;
 
     for (ushort v = 0; v < vertices; v++) {
         for (ushort u = 0; u < vertices; u++) {
+            if (u == v) continue;
+
             if (graph.is_adjacent(v, u)) {
                 int weight = graph.get_weight(v, u);
 
-                edge_array[e].src = v;
-                edge_array[e].dest = u;
-                edge_array[e].weight = weight;
-                e++;
+                edge_list.push_back({v, u, weight});
             }
         }
 //        for (ushort j = 0; j < adj.size(); j++) {
@@ -36,7 +35,7 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
 //        }
     }
 
-    std::sort(edge_array, edge_array + edges, [](edge a, edge b) {
+    std::sort(edge_list.begin(), edge_list.end(), [](edge a, edge b) {
         return a.weight < b.weight;
     });
 
@@ -50,7 +49,7 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
     e = 0;
 
     while (i < vertices - 1) {
-        edge next_edge = edge_array[e++];
+        edge next_edge = edge_list[e++];
         ushort x = find(parent, next_edge.src);
         ushort y = find(parent, next_edge.dest);
 
@@ -66,7 +65,6 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
         }
     }
 
-    delete[] edge_array;
     delete[] parent;
 }
 

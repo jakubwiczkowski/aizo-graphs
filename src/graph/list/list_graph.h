@@ -23,9 +23,7 @@ public:
     void remove_edge(ushort u, ushort v) override;
 
     [[nodiscard]] bool is_adjacent(ushort u, ushort v) override;
-
     [[nodiscard]] std::vector<ushort> get_adjacent(ushort u) override;
-
     [[nodiscard]] int get_weight(ushort u, ushort v) override;
 
     void print() override;

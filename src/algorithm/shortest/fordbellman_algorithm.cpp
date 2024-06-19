@@ -16,6 +16,7 @@ void fordbellman_algorithm::run(graph &graph, ushort start, bool print) {
     dist[start] = 0;
 
     for (ushort i = 0; i < graph.get_vertices() - 1; i++) {
+        bool all_not_passed = true;
         for (ushort u = 0; u < graph.get_vertices(); u++) {
             auto adj = graph.get_adjacent(u);
             for (ushort j = 0; j < adj.size(); j++) {
@@ -25,14 +26,18 @@ void fordbellman_algorithm::run(graph &graph, ushort start, bool print) {
                 if (dist[u] != std::numeric_limits<ushort>::max() && dist[u] + weight < dist[v]) {
                     dist[v] = dist[u] + weight;
                     path[v] = u;
+
+                    all_not_passed = false;
                 }
             }
         }
+
+        if (all_not_passed) break;
     }
 
     for (ushort u = 0; u < graph.get_vertices(); u++) {
         auto adj = graph.get_adjacent(u);
-        for (ushort j = 0; j < adj.size(); j++) {
+        for (auto j = 0; j < adj.size(); j++) {
             ushort v = adj[j];
             ushort weight = graph.get_weight(u, v);
 

@@ -4,8 +4,8 @@
 
 void prim_algorithm::run(graph &graph, ushort start, bool print) {
     auto* in_mst = new ushort[graph.get_vertices()];
-    auto* key = new ushort[graph.get_vertices()];
-    auto* parent = new ushort[graph.get_vertices()];
+    auto *key = new int[graph.get_vertices()];
+    auto *parent = new ushort[graph.get_vertices()];
 
     for (ushort i = 0; i < graph.get_vertices(); i++) {
         in_mst[i] = 0;
@@ -38,7 +38,7 @@ void prim_algorithm::run(graph &graph, ushort start, bool print) {
     delete[] parent;
 }
 
-ushort prim_algorithm::min_key(ushort* key, ushort* in_mst, ushort vertices) {
+ushort prim_algorithm::min_key(int *key, ushort *in_mst, ushort vertices) {
     ushort min = std::numeric_limits<ushort>::max();
     ushort min_index = 0;
 
