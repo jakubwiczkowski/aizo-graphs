@@ -67,17 +67,3 @@ void dijkstra_algorithm::run(graph &graph, ushort start, bool print) {
     delete[] dist;
     delete[] visited;
 }
-
-//ushort dijkstra_algorithm::min_distance(ushort *dist, bool *visited, ushort vertices) {
-//    ushort min = std::numeric_limits<ushort>::max();
-//    ushort min_index = 0;
-//
-//    for (ushort i = 0; i < vertices; i++) {
-//        if (!visited[i] && dist[i] <= min) {
-//            min = dist[i];
-//            min_index = i;
-//        }
-//    }
-//
-//    return min_index;
-//}
