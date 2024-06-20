@@ -9,6 +9,8 @@
 class matrix_graph : public graph {
     // Macierz
     int** matrix;
+
+    list<ushort>* adjacents;
 public:
     matrix_graph(ushort vertices, double fill, bool is_directed = false);
     matrix_graph(ushort vertices, ushort edges);
@@ -18,7 +20,7 @@ public:
     void remove_edge(ushort u, ushort v) override;
 
     [[nodiscard]] bool is_adjacent(ushort u, ushort v) override;
-    [[nodiscard]] std::vector<ushort> get_adjacent(ushort u) override;
+    [[nodiscard]] list<ushort> get_adjacent(ushort u) override;
 
     [[nodiscard]] int get_weight(ushort u, ushort v) override;
 

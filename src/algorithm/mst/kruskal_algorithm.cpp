@@ -3,11 +3,11 @@
 #include <iostream>
 #include <algorithm>
 #include "kruskal_algorithm.h"
+//#include "helper/edge.h"
 
 void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
     ushort vertices = graph.get_vertices();
     edge result[vertices];
-
 
     std::vector<edge> edge_list;
 
@@ -48,9 +48,12 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
     }
 
     if (print) {
+        int weight = 0;
         for (ushort idx = 0; idx < vertices - 1; idx++) {
             std::cout << result[idx].src << " -> " << result[idx].dest << " | " << result[idx].weight << std::endl;
+            weight += result[idx].weight;
         }
+        std::cout << "Total weight: " << weight << std::endl;
     }
 
     delete[] parent;

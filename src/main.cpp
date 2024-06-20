@@ -2,7 +2,6 @@
 #include <fstream>
 #include <chrono>
 
-#include "list/linked_list.h"
 #include "graph/matrix/matrix_graph.h"
 #include "graph/list/list_graph.h"
 #include "algorithm/mst/prim_algorithm.h"
@@ -12,7 +11,7 @@
 #include "menu/menu.h"
 
 int main() {
-    menu main_menu(9);
+    menu main_menu(10);
 
     matrix_graph* loaded_matrix_graph = nullptr;
     list_graph* loaded_list_graph = nullptr;
@@ -46,20 +45,19 @@ int main() {
         file >> edges >> vertices;
 
         loaded_matrix_graph = new matrix_graph(vertices, (ushort) (directed ? edges : edges * 2));
-        loaded_list_graph = new list_graph(vertices, (ushort) (directed ? edges : edges * 2));
 
         for (int i = 0; i < edges; ++i) {
             ushort u, v;
             int weight;
             file >> u >> v >> weight;
             loaded_matrix_graph->add_edge(u, v, weight);
-            loaded_list_graph->add_edge(u, v, weight);
 
             if (!is_directed) {
                 loaded_matrix_graph->add_edge(v, u, weight);
-                loaded_list_graph->add_edge(v, u, weight);
             }
         }
+
+        loaded_list_graph = new list_graph(*loaded_matrix_graph);
     });
     main_menu.add_option(1, "Wygeneruj graf losowo", [&loaded_matrix_graph, &loaded_list_graph] {
         double density;
@@ -104,17 +102,20 @@ int main() {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
+        ushort v;
+        std::cout << "[?] Podaj wierzchołek startowy: ";
+        std::cin >> v;
 
         prim_algorithm prim{};
         std::cout << "[#] Prim - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        prim.run(*loaded_matrix_graph, 0, true);
+        prim.run(*loaded_matrix_graph, v, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Prim - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Prim - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        prim.run(*loaded_list_graph, 0, true);
+        prim.run(*loaded_list_graph, v, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Prim - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
@@ -123,17 +124,20 @@ int main() {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
+        ushort v;
+        std::cout << "[?] Podaj wierzchołek startowy: ";
+        std::cin >> v;
 
         kruskal_algorithm kruskal{};
         std::cout << "[#] Kruskal - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        kruskal.run(*loaded_matrix_graph, 0, true);
+        kruskal.run(*loaded_matrix_graph, v, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Kruskal - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Kruskal - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        kruskal.run(*loaded_list_graph, 0, true);
+        kruskal.run(*loaded_list_graph, v, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Kruskal - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
@@ -143,6 +147,7 @@ int main() {
             return;
         }
         ushort v;
+        std::cout << "[?] Podaj wierzchołek startowy: ";
         std::cin >> v;
 
         dijkstra_algorithm dijkstra{};
@@ -163,6 +168,7 @@ int main() {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
+        std::cout << "[?] Podaj wierzchołek startowy: ";
         ushort v;
         std::cin >> v;
 
@@ -220,7 +226,7 @@ int main() {
                             auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 
                             sum_prim_list += duration_list;
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list):   " << duration_list << "ns" << std::endl;
                         } else {
                             auto start_matrix = std::chrono::high_resolution_clock::now();
                             kruskal.run(*matrix, 0, false);
@@ -236,7 +242,7 @@ int main() {
                             auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 
                             sum_kruskal_list += duration_list;
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list):   " << duration_list << "ns" << std::endl;
                         }
                     }
                     delete list;
@@ -285,7 +291,7 @@ int main() {
                             auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 
                             sum_dijkstra_list += duration_list;
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (list): " << duration_list << "ns" << std::endl;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Dijkstra runtime (list):   " << duration_list << "ns" << std::endl;
                         } else {
                             auto start_matrix = std::chrono::high_resolution_clock::now();
                             fordbellman.run(*matrix, 0, false);
@@ -301,7 +307,7 @@ int main() {
                             auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
 
                             sum_fordbellman_list += duration_list;
-                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (list): " << duration_list << "ns" << std::endl;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Ford-Bellman runtime (list):   " << duration_list << "ns" << std::endl;
                         }
 
                     }
@@ -318,7 +324,19 @@ int main() {
 
         file_sp.close();
     });
-    main_menu.add_option(8, "Zakoncz", [&main_menu] {
+    main_menu.add_option(8, "Test", [] {
+        list<int> list;
+        list.add(1);
+        list.add(3);
+        list.add(5);
+        list.add(8);
+
+        std::cout << list.size() << std::endl;
+        list.remove(1);
+        std::cout << list.size() << std::endl;
+        list.print();
+    });
+    main_menu.add_option(9, "Zakoncz", [&main_menu] {
         std::cout << "[#] Koniec programu\n";
         main_menu.close();
     });

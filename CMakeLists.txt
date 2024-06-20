@@ -5,13 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 add_executable(aizo_graphs src/main.cpp
-        src/list/linked_list.h
-        src/list/node.h
-        src/list/node.cpp
         src/graph/graph.h
         src/graph/graph.cpp
         src/graph/list/connection.h
-        src/list/linked_list.cpp
         src/graph/matrix/matrix_graph.cpp
         src/graph/matrix/matrix_graph.h
         src/graph/list/list_graph.cpp
@@ -30,5 +26,11 @@ add_executable(aizo_graphs src/main.cpp
         src/algorithm/shortest/fordbellman_algorithm.cpp
         src/algorithm/shortest/fordbellman_algorithm.h
         src/list/pair.cpp
-        src/list/pair.h)
+        src/list/pair.h
+        src/list/list.cpp
+        src/list/list.h
+        src/list/heap.cpp
+        src/list/heap.h
+        src/algorithm/mst/helper/vertex.h
+        src/algorithm/mst/helper/edge.h)
 #target_link_options(aizo_graphs PRIVATE -static-libgcc -static-libstdc++ -static)

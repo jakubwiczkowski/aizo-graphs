@@ -8,15 +8,6 @@
 
 class kruskal_algorithm : public algorithm {
 public:
-    /**
-     * Krawędź grafu
-     */
-    struct edge {
-        ushort src;
-        ushort dest;
-        int weight;
-    };
-
     void run(graph& graph, ushort start, bool print) override;
 
 private:

@@ -4,7 +4,7 @@
 #define AIZO_GRAPHS_GRAPH_H
 
 #include <vector>
-#include "../list/linked_list.h"
+#include "../list/list.h"
 
 typedef unsigned short ushort;
 
@@ -52,7 +52,7 @@ public:
      * @param u wierzchołek
      * @return lista sąsiednich wierzchołków
      */
-    [[nodiscard]] virtual std::vector<ushort> get_adjacent(ushort u) = 0;
+    [[nodiscard]] virtual list<ushort> get_adjacent(ushort u) = 0;
     /**
      * Zwraca wagę krawędzi między wierzchołkami u i v
      *
