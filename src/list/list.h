@@ -1,5 +1,3 @@
-
-
 #ifndef AIZO_GRAPHS_LIST_H
 #define AIZO_GRAPHS_LIST_H
 
@@ -7,9 +5,9 @@
 #include <iostream>
 #include "pair.h"
 #include "../graph/list/connection.h"
-#include "../algorithm/mst/helper/vertex.h"
-#include "../algorithm/mst/kruskal_algorithm.h"
-#include "../algorithm/mst/helper/edge.h"
+#include "../algorithm/mst/helper/vertex_prim.h"
+#include "../algorithm/mst/helper/edge_kruskal.h"
+#include "../algorithm/shortest/helper/vertex_dijkstra.h"
 
 template<typename T>
 class list {
@@ -40,7 +38,8 @@ template class list<int>;
 template class list<ushort>;
 template class list<pair<ushort, ushort>>;
 template class list<connection>;
-template class list<vertex>;
-//template class list<edge>;
+template class list<vertex_prim>;
+template class list<vertex_dijkstra>;
+template class list<edge_kruskal>;
 
 #endif //AIZO_GRAPHS_LIST_H

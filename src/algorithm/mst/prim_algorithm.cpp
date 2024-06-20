@@ -8,7 +8,7 @@ void prim_algorithm::run(graph &graph, ushort start, bool print) {
     auto* key = new int[graph.get_vertices()];
     auto* parent = new ushort[graph.get_vertices()];
 
-    heap<vertex> heap;
+    heap<vertex_prim> heap;
 
     for (ushort i = 0; i < graph.get_vertices(); i++) {
         in_mst[i] = 0;
@@ -22,8 +22,6 @@ void prim_algorithm::run(graph &graph, ushort start, bool print) {
             heap.add({i, key[i]});
         }
     }
-
-    heap.print();
 
     for (ushort i = 0; i < graph.get_vertices(); i++) {
         ushort u = heap[0].idx;

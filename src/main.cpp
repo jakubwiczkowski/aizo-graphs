@@ -5,9 +5,9 @@
 #include "graph/matrix/matrix_graph.h"
 #include "graph/list/list_graph.h"
 #include "algorithm/mst/prim_algorithm.h"
+#include "algorithm/mst/kruskal_algorithm.h"
 #include "algorithm/shortest/dijkstra_algorithm.h"
 #include "algorithm/shortest/fordbellman_algorithm.h"
-#include "algorithm/mst/kruskal_algorithm.h"
 #include "menu/menu.h"
 
 int main() {
@@ -325,16 +325,16 @@ int main() {
         file_sp.close();
     });
     main_menu.add_option(8, "Test", [] {
-        list<int> list;
-        list.add(1);
-        list.add(3);
-        list.add(5);
-        list.add(8);
-
-        std::cout << list.size() << std::endl;
-        list.remove(1);
-        std::cout << list.size() << std::endl;
-        list.print();
+//        list<int> list;
+//        list.add(1);
+//        list.add(3);
+//        list.add(5);
+//        list.add(8);
+//
+//        std::cout << list.size() << std::endl;
+//        list.remove(1);
+//        std::cout << list.size() << std::endl;
+//        list.print();
     });
     main_menu.add_option(9, "Zakoncz", [&main_menu] {
         std::cout << "[#] Koniec programu\n";

@@ -20,6 +20,7 @@ private:
      */
     [[nodiscard]]
     ushort find(ushort* parent, ushort i);
+
     /**
      * Łączy zbiory wierzchołków
      *
@@ -28,6 +29,10 @@ private:
      * @param y wierzchołek y
      */
     void union_set(ushort* parent, ushort x, ushort y);
+
+    static void sort_edges(list<edge_kruskal>& edge_list);
+    static void quick_sort(list<edge_kruskal>& edge_list, int low, int high);
+    static int partition(list<edge_kruskal>& edge_list, int low, int high);
 };
 
 
