@@ -142,17 +142,19 @@ int main() {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
+        ushort v;
+        std::cin >> v;
 
         dijkstra_algorithm dijkstra{};
         std::cout << "[#] Dijkstra - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        dijkstra.run(*loaded_matrix_graph, 0, true);
+        dijkstra.run(*loaded_matrix_graph, v, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Dijkstra - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Dijkstra - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        dijkstra.run(*loaded_list_graph, 0, true);
+        dijkstra.run(*loaded_list_graph, v, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Dijkstra - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
@@ -161,17 +163,19 @@ int main() {
             std::cout << "[!] Brak wczytanego grafu\n";
             return;
         }
+        ushort v;
+        std::cin >> v;
 
         fordbellman_algorithm fordbellman{};
         std::cout << "[#] Ford-Bellman - macierzowo\n";
         const auto start_time_matrix = std::chrono::high_resolution_clock::now();
-        fordbellman.run(*loaded_matrix_graph, 0, true);
+        fordbellman.run(*loaded_matrix_graph, v, true);
         const auto end_time_matrix = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Ford-Bellman - macierzowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_matrix - start_time_matrix).count() << "ns" << std::endl;
 
         std::cout << "[#] Ford-Bellman - listowo\n";
         const auto start_time_list = std::chrono::high_resolution_clock::now();
-        fordbellman.run(*loaded_list_graph, 0, true);
+        fordbellman.run(*loaded_list_graph, v, true);
         const auto end_time_list = std::chrono::high_resolution_clock::now();
         std::cout << "[#] Ford-Bellman - listowo - wykonano w " << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_list - start_time_list).count() << "ns" << std::endl;
     });
@@ -184,67 +188,67 @@ int main() {
         std::ofstream file_sp("results_sp.csv", std::ios::app);
 
         // ALGORYTMY MST
-//        prim_algorithm prim{};
-//        kruskal_algorithm kruskal{};
-//        for (ushort size : sizes) {
-//            std::cout << "[#] Size: " << size << std::endl;
-//            file << size << ",";
-//            for (double density : densities) {
-//                std::cout << " ↳ Density: " << density << std::endl;
-//                file << density << ",";
-//                long sum_prim_matrix = 0;
-//                long sum_prim_list = 0;
-//                long sum_kruskal_matrix = 0;
-//                long sum_kruskal_list = 0;
-//                for (ushort n = 0; n < repetitions; n++) {
-//                    auto* matrix = new matrix_graph(size, density, false);
-//                    auto* list = new list_graph(*matrix);
-//                    for (int type : {0, 1}) {
-//
-//                        if (type == 0) {
-//                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            prim.run(*matrix, 0, false);
-//                            auto end_matrix = std::chrono::high_resolution_clock::now();
-//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-//
-//                            sum_prim_matrix += duration_matrix;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
-//
-//                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            prim.run(*list, 0, false);
-//                            auto end_list = std::chrono::high_resolution_clock::now();
-//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-//
-//                            sum_prim_list += duration_list;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
-//                        } else {
-//                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            kruskal.run(*matrix, 0, false);
-//                            auto end_matrix = std::chrono::high_resolution_clock::now();
-//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-//
-//                            sum_kruskal_matrix += duration_matrix;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
-//
-//                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            kruskal.run(*list, 0, false);
-//                            auto end_list = std::chrono::high_resolution_clock::now();
-//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-//
-//                            sum_kruskal_list += duration_list;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
-//                        }
-//                    }
-//                    delete list;
-//                    delete matrix;
-//                }
-//                file << sum_prim_matrix / repetitions << "," << sum_prim_list / repetitions << "," << sum_kruskal_matrix / repetitions << "," << sum_kruskal_list / repetitions << "\n";
-//                std::cout << " | Prim (matrix)    avg.: " << sum_prim_matrix / repetitions << "ns\n";
-//                std::cout << " | Prim (list)      avg.: " << sum_prim_list / repetitions << "ns\n";
-//                std::cout << " | Kruskal (matrix) avg.: " << sum_kruskal_matrix / repetitions << "ns\n";
-//                std::cout << " ↳ Kruskal (list)   avg.: " << sum_kruskal_list / repetitions << "ns\n";
-//            }
-//        }
+        prim_algorithm prim{};
+        kruskal_algorithm kruskal{};
+        for (ushort size : sizes) {
+            std::cout << "[#] Size: " << size << std::endl;
+            file << size << ",";
+            for (double density : densities) {
+                std::cout << " ↳ Density: " << density << std::endl;
+                file << density << ",";
+                long sum_prim_matrix = 0;
+                long sum_prim_list = 0;
+                long sum_kruskal_matrix = 0;
+                long sum_kruskal_list = 0;
+                for (ushort n = 0; n < repetitions; n++) {
+                    auto* matrix = new matrix_graph(size, density, false);
+                    auto* list = new list_graph(*matrix);
+                    for (int type : {0, 1}) {
+
+                        if (type == 0) {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            prim.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_prim_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            prim.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_prim_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list): " << duration_list << "ns" << std::endl;
+                        } else {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*matrix, 0, false);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_kruskal_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*list, 0, false);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_kruskal_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list): " << duration_list << "ns" << std::endl;
+                        }
+                    }
+                    delete list;
+                    delete matrix;
+                }
+                file << sum_prim_matrix / repetitions << "," << sum_prim_list / repetitions << "," << sum_kruskal_matrix / repetitions << "," << sum_kruskal_list / repetitions << "\n";
+                std::cout << " | Prim (matrix)    avg.: " << sum_prim_matrix / repetitions << "ns\n";
+                std::cout << " | Prim (list)      avg.: " << sum_prim_list / repetitions << "ns\n";
+                std::cout << " | Kruskal (matrix) avg.: " << sum_kruskal_matrix / repetitions << "ns\n";
+                std::cout << " ↳ Kruskal (list)   avg.: " << sum_kruskal_list / repetitions << "ns\n";
+            }
+        }
 
         file.close();
 

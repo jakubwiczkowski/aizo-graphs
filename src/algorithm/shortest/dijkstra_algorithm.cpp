@@ -37,6 +37,10 @@ void dijkstra_algorithm::run(graph &graph, ushort start, bool print) {
         for (ushort i = 0; i < graph.get_vertices(); i++) {
             std::cout << "Path from " << start << " to " << i << " is: ";
             ushort end = i;
+            if (path[end] == std::numeric_limits<ushort>::max()) {
+                std::cout << "Path doesn't exist" << std::endl;
+                continue;
+            }
             while (end != start) {
                 std::cout << end << " <- ";
                 end = path[end];
