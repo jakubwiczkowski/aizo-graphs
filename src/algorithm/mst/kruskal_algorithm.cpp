@@ -1,24 +1,24 @@
 
 
-#include <iostream>
 #include <algorithm>
 #include "kruskal_algorithm.h"
 #include "helper/edge_kruskal.h"
 
-void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
+kruskal_result kruskal_algorithm::run(graph &graph, ushort start) {
     ushort vertices = graph.get_vertices();
-    edge_kruskal result[vertices];
+    edge_kruskal* result = new edge_kruskal[vertices];
 
+//    list<edge_kruskal> result;
     list<edge_kruskal> edge_list;
 
-    for (ushort v = 0; v < vertices; v++) {
-        list<ushort> adjacent = graph.get_adjacent(v);
+    for (ushort u = 0; u < vertices; u++) {
+        list<ushort> adjacent = graph.get_adjacent(u);
 
         for (int idx = 0; idx < adjacent.size(); idx++) {
-            ushort u = adjacent[idx];
-            int weight = graph.get_weight(v, u);
+            ushort v = adjacent[idx];
+            int weight = graph.get_weight(u, v);
 
-            edge_list.add({v, u, weight});
+            edge_list.add({u, v, weight});
         }
     }
 
@@ -40,20 +40,24 @@ void kruskal_algorithm::run(graph &graph, ushort start, bool print) {
 
         if (x != y) {
             result[i++] = next_edge;
+//            result.add(next_edge);
+//            i++;
             union_set(parent, x, y);
         }
     }
 
-    if (print) {
-        int weight = 0;
-        for (ushort idx = 0; idx < vertices - 1; idx++) {
-            std::cout << result[idx].src << " -> " << result[idx].dest << " | " << result[idx].weight << std::endl;
-            weight += result[idx].weight;
-        }
-        std::cout << "Total weight: " << weight << std::endl;
-    }
+//    if (print) {
+//        int weight = 0;
+//        for (ushort idx = 0; idx < vertices - 1; idx++) {
+//            std::cout << result[idx].src << " -> " << result[idx].dest << " | " << result[idx].weight << std::endl;
+//            weight += result[idx].weight;
+//        }
+//        std::cout << "Total weight: " << weight << std::endl;
+//    }
 
     delete[] parent;
+
+    return kruskal_result(result);
 }
 
 ushort kruskal_algorithm::find(ushort *parent, ushort i) {

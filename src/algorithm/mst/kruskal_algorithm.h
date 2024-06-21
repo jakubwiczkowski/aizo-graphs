@@ -5,10 +5,11 @@
 
 
 #include "../algorithm.h"
+#include "kruskal_result.h"
 
-class kruskal_algorithm : public algorithm {
+class kruskal_algorithm : public algorithm<kruskal_result> {
 public:
-    void run(graph& graph, ushort start, bool print) override;
+    kruskal_result run(graph& graph, ushort start) override;
 
 private:
     /**

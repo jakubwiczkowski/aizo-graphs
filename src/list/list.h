@@ -26,6 +26,8 @@ public:
     virtual T &get(int index);
     virtual void remove(int index);
 
+    void set(int index, T element);
+
     int find_index(T element);
     void swap(int first, int second);
 

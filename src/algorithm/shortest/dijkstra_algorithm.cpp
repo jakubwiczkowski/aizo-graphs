@@ -1,12 +1,11 @@
 
 
 #include <limits>
-#include <iostream>
 #include "dijkstra_algorithm.h"
 #include "helper/vertex_dijkstra.h"
 #include "../../list/heap.h"
 
-void dijkstra_algorithm::run(graph &graph, ushort start, bool print) {
+dijkstra_result dijkstra_algorithm::run(graph &graph, ushort start) {
     auto *dist = new int[graph.get_vertices()];
     bool *visited = new bool[graph.get_vertices()];
     auto *path = new ushort[graph.get_vertices()];
@@ -46,24 +45,26 @@ void dijkstra_algorithm::run(graph &graph, ushort start, bool print) {
         }
     }
 
-    if (print) {
-        for (ushort i = 0; i < graph.get_vertices(); i++) {
-            std::cout << "Path from " << start << " to " << i << " is: ";
-            ushort end = i;
-            if (path[end] == std::numeric_limits<ushort>::max()) {
-                std::cout << "Path doesn't exist" << std::endl;
-                continue;
-            }
-            while (end != start) {
-                std::cout << end << " <- ";
-                end = path[end];
-            }
-            std::cout << start;
-            std::cout << " | Weight: " << dist[i] << std::endl;
-        }
-    }
+//    if (print) {
+//        for (ushort i = 0; i < graph.get_vertices(); i++) {
+//            std::cout << "Path from " << start << " to " << i << " is: ";
+//            ushort end = i;
+//            if (path[end] == std::numeric_limits<ushort>::max()) {
+//                std::cout << "Path doesn't exist" << std::endl;
+//                continue;
+//            }
+//            while (end != start) {
+//                std::cout << end << " <- ";
+//                end = path[end];
+//            }
+//            std::cout << start;
+//            std::cout << " | Weight: " << dist[i] << std::endl;
+//        }
+//    }
 
-    delete[] path;
-    delete[] dist;
+//    delete[] path;
+//    delete[] dist;
     delete[] visited;
+
+    return dijkstra_result(new dijkstra_data{dist, path, start});
 }

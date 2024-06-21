@@ -33,5 +33,11 @@ add_executable(aizo_graphs src/main.cpp
         src/list/heap.h
         src/algorithm/mst/helper/vertex_prim.h
         src/algorithm/mst/helper/edge_kruskal.h
-        src/algorithm/shortest/helper/vertex_dijkstra.h)
+        src/algorithm/shortest/helper/vertex_dijkstra.h
+        src/algorithm/result.h
+        src/algorithm/result.h
+        src/algorithm/mst/prim_result.h
+        src/algorithm/mst/kruskal_result.h
+        src/algorithm/shortest/fordbellman_result.h
+        src/algorithm/shortest/dijkstra_result.h)
 #target_link_options(aizo_graphs PRIVATE -static-libgcc -static-libstdc++ -static)

@@ -5,7 +5,9 @@
 
 
 #include "../graph/graph.h"
+#include "result.h"
 
+template<typename T>
 class algorithm {
 public:
     /**
@@ -15,7 +17,7 @@ public:
      * @param start wierzchołek startowy
      * @param print czy wypisać wynik
      */
-    virtual void run(graph& graph, ushort start, bool print) = 0;
+    virtual T run(graph& graph, ushort start) = 0;
 };
 
 

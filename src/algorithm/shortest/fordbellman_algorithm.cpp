@@ -4,7 +4,7 @@
 #include <iostream>
 #include "fordbellman_algorithm.h"
 
-void fordbellman_algorithm::run(graph &graph, ushort start, bool print) {
+fordbellman_result fordbellman_algorithm::run(graph &graph, ushort start) {
     auto* dist = new ushort[graph.get_vertices()];
     auto* path = new ushort[graph.get_vertices()];
 
@@ -43,28 +43,30 @@ void fordbellman_algorithm::run(graph &graph, ushort start, bool print) {
 
             if (dist[u] != std::numeric_limits<ushort>::max() && dist[u] + weight < dist[v]) {
                 std::cout << "Graph contains negative cycle" << std::endl;
-                return;
+                return fordbellman_result(new fordbellman_data{dist, path, start});
             }
         }
     }
 
-    if (print) {
-        for (ushort i = 0; i < graph.get_vertices(); i++) {
-            std::cout << "Path from " << start << " to " << i << " is: ";
-            ushort end = i;
-            if (path[end] == std::numeric_limits<ushort>::max()) {
-                std::cout << "Path doesn't exist" << std::endl;
-                continue;
-            }
-            while (end != start) {
-                std::cout << end << " <- ";
-                end = path[end];
-            }
-            std::cout << start;
-            std::cout << " | Weight: " << dist[i] << std::endl;
-        }
-    }
+//    if (print) {
+//        for (ushort i = 0; i < graph.get_vertices(); i++) {
+//            std::cout << "Path from " << start << " to " << i << " is: ";
+//            ushort end = i;
+//            if (path[end] == std::numeric_limits<ushort>::max()) {
+//                std::cout << "Path doesn't exist" << std::endl;
+//                continue;
+//            }
+//            while (end != start) {
+//                std::cout << end << " <- ";
+//                end = path[end];
+//            }
+//            std::cout << start;
+//            std::cout << " | Weight: " << dist[i] << std::endl;
+//        }
+//    }
 
-    delete[] path;
-    delete[] dist;
+//    delete[] path;
+//    delete[] dist;
+
+    return fordbellman_result(new fordbellman_data{dist, path, start});
 }

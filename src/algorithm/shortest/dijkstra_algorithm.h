@@ -5,10 +5,11 @@
 
 
 #include "../algorithm.h"
+#include "dijkstra_result.h"
 
-class dijkstra_algorithm : public algorithm {
+class dijkstra_algorithm : public algorithm<dijkstra_result> {
 public:
-    void run(graph& graph, ushort start, bool print) override;
+    dijkstra_result run(graph& graph, ushort start) override;
 };
 
 

@@ -5,10 +5,11 @@
 
 
 #include "../algorithm.h"
+#include "prim_result.h"
 
-class prim_algorithm : public algorithm {
+class prim_algorithm : public algorithm<prim_result> {
 public:
-    void run(graph& graph, ushort start, bool print) override;
+    prim_result run(graph& graph, ushort start) override;
 };
 
 

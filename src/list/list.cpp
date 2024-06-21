@@ -15,6 +15,7 @@ list<T>::list(const list<T> &other) {
     this->current = other.current;
     this->array = new T[this->capacity];
 
+//    other.array == nullptr;
     for (int i = 0; i < this->current; i++) {
         this->array[i] = other.array[i];
     }
@@ -22,6 +23,8 @@ list<T>::list(const list<T> &other) {
 
 template<typename T>
 list<T>::~list() {
+//    if (this->array == nullptr)
+//        return;
     delete[] this->array;
 }
 
@@ -46,6 +49,13 @@ void list<T>::add(T element) {
 template<typename T>
 T& list<T>::get(int index) {
     return this->array[index];
+}
+
+template<typename T>
+void list<T>::set(int index, T element) {
+    if (index >= 0 && index < this->current) {
+        this->array[index] = element;
+    }
 }
 
 //template<typename T>

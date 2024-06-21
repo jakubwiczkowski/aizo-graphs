@@ -5,10 +5,11 @@
 
 
 #include "../algorithm.h"
+#include "fordbellman_result.h"
 
-class fordbellman_algorithm : public algorithm {
+class fordbellman_algorithm : public algorithm<fordbellman_result> {
 public:
-    void run(graph &graph, ushort start, bool print) override;
+    fordbellman_result run(graph &graph, ushort start) override;
 };
 
 
