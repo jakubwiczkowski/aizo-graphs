@@ -44,7 +44,7 @@ int main() {
         ushort vertices, edges;
         file >> edges >> vertices;
 
-        loaded_matrix_graph = new matrix_graph(vertices, (ushort) (directed ? edges : edges * 2), is_directed);
+        loaded_matrix_graph = new matrix_graph(vertices, (ulong) (directed ? edges : edges * 2), is_directed);
 
         for (int i = 0; i < edges; ++i) {
             ushort u, v;
@@ -183,83 +183,74 @@ int main() {
     });
     main_menu.add_option(7, "Obliczenia do wykresów", [] {
         ushort repetitions = 25;
-        ushort sizes[] = {10, 20, 50, 100, 200, 500, 1000};
+        ushort sizes[] = {10, 20, 30, 50, 100, 200, 300};
         double densities[] = {0.25, 0.5, 0.99};
 
         std::ofstream file("results_mst.csv", std::ios::app);
         std::ofstream file_sp("results_sp.csv", std::ios::app);
 
         // ALGORYTMY MST
-//        prim_algorithm prim{};
-//        kruskal_algorithm kruskal{};
-//        for (ushort size : sizes) {
-//            std::cout << "[#] Size: " << size << std::endl;
-//            file << size << ",";
-//            for (double density : densities) {
-//                std::cout << " ↳ Density: " << density << std::endl;
-//                file << density << ",";
-//                long sum_prim_matrix = 0;
-//                long sum_prim_list = 0;
-//                long sum_kruskal_matrix = 0;
-//                long sum_kruskal_list = 0;
-//                for (ushort n = 0; n < repetitions; n++) {
-//                    auto* matrix = new matrix_graph(size, density, false);
-//                    auto* list = new list_graph(*matrix);
-//
-////                    for (int i = 0; i < matrix->get_vertices(); i++) {
-////                        std::cout << i << ": ";
-////                        matrix->get_adjacent(i).print();
-////                        std::cout << std::endl;
-////
-////                        matrix->print();
-////                    }
-//
-//                    for (int type : {0, 1}) {
-//                        if (type == 0) {
-//                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            prim.run(*matrix, 0, false);
-//                            auto end_matrix = std::chrono::high_resolution_clock::now();
-//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-//
-//                            sum_prim_matrix += duration_matrix;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
-//
-//                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            prim.run(*list, 0, false);
-//                            auto end_list = std::chrono::high_resolution_clock::now();
-//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-//
-//                            sum_prim_list += duration_list;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list):   " << duration_list << "ns" << std::endl;
-//                        } else {
-//                            auto start_matrix = std::chrono::high_resolution_clock::now();
-//                            kruskal.run(*matrix, 0, false);
-//                            auto end_matrix = std::chrono::high_resolution_clock::now();
-//                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
-//
-//                            sum_kruskal_matrix += duration_matrix;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
-//
-//                            auto start_list = std::chrono::high_resolution_clock::now();
-//                            kruskal.run(*list, 0, false);
-//                            auto end_list = std::chrono::high_resolution_clock::now();
-//                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
-//
-//                            sum_kruskal_list += duration_list;
-//                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list):   " << duration_list << "ns" << std::endl;
-//                        }
-//                    }
-//                    delete list;
-//                    delete matrix;
-//                }
-//                file << sum_prim_matrix / repetitions << "," << sum_prim_list / repetitions << "," << sum_kruskal_matrix / repetitions << "," << sum_kruskal_list / repetitions << "\n";
-//                std::cout << " | Prim (matrix)    avg.: " << sum_prim_matrix / repetitions << "ns\n";
-//                std::cout << " | Prim (list)      avg.: " << sum_prim_list / repetitions << "ns\n";
-//                std::cout << " | Kruskal (matrix) avg.: " << sum_kruskal_matrix / repetitions << "ns\n";
-//                std::cout << " ↳ Kruskal (list)   avg.: " << sum_kruskal_list / repetitions << "ns\n";
-//            }
-//        }
-//
+        prim_algorithm prim{};
+        kruskal_algorithm kruskal{};
+        for (ushort size : sizes) {
+            std::cout << "[#] Size: " << size << std::endl;
+            for (double density : densities) {
+                std::cout << " ↳ Density: " << density << std::endl;
+                file << size << "," << density << ",";
+                long sum_prim_matrix = 0;
+                long sum_prim_list = 0;
+                long sum_kruskal_matrix = 0;
+                long sum_kruskal_list = 0;
+                for (ushort n = 0; n < repetitions; n++) {
+                    auto* matrix = new matrix_graph(size, density, false);
+                    auto* list = new list_graph(*matrix);
+
+                    for (int type : {0, 1}) {
+                        if (type == 0) {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            prim.run(*matrix, 0);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_prim_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            prim.run(*list, 0);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_prim_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Prim runtime (list):   " << duration_list << "ns" << std::endl;
+                        } else {
+                            auto start_matrix = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*matrix, 0);
+                            auto end_matrix = std::chrono::high_resolution_clock::now();
+                            auto duration_matrix = std::chrono::duration_cast<std::chrono::nanoseconds>(end_matrix - start_matrix).count();
+
+                            sum_kruskal_matrix += duration_matrix;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (matrix): " << duration_matrix << "ns" << std::endl;
+
+                            auto start_list = std::chrono::high_resolution_clock::now();
+                            kruskal.run(*list, 0);
+                            auto end_list = std::chrono::high_resolution_clock::now();
+                            auto duration_list = std::chrono::duration_cast<std::chrono::nanoseconds>(end_list - start_list).count();
+
+                            sum_kruskal_list += duration_list;
+                            std::cout << "  ↳ (" << n + 1 << "/" << repetitions << ") Kruskal runtime (list):   " << duration_list << "ns" << std::endl;
+                        }
+                    }
+                    delete list;
+                    delete matrix;
+                }
+                file << sum_prim_matrix / repetitions << "," << sum_prim_list / repetitions << "," << sum_kruskal_matrix / repetitions << "," << sum_kruskal_list / repetitions << "\n";
+                std::cout << " | Prim (matrix)    avg.: " << sum_prim_matrix / repetitions << "ns\n";
+                std::cout << " | Prim (list)      avg.: " << sum_prim_list / repetitions << "ns\n";
+                std::cout << " | Kruskal (matrix) avg.: " << sum_kruskal_matrix / repetitions << "ns\n";
+                std::cout << " ↳ Kruskal (list)   avg.: " << sum_kruskal_list / repetitions << "ns\n";
+            }
+        }
+
         file.close();
 
         // ALGORYTMY SHORTEST PATH
@@ -267,10 +258,9 @@ int main() {
         fordbellman_algorithm fordbellman{};
         for (ushort size : sizes) {
             std::cout << "[#] Size: " << size << std::endl;
-            file_sp << size << ",";
             for (double density : densities) {
                 std::cout << " ↳ Density: " << density << std::endl;
-                file_sp << density << ",";
+                file_sp << size << "," << density << ",";
                 long sum_dijkstra_matrix = 0;
                 long sum_dijkstra_list = 0;
                 long sum_fordbellman_matrix = 0;
@@ -328,17 +318,20 @@ int main() {
 
         file_sp.close();
     });
-    main_menu.add_option(8, "Test", [] {
-//        list<int> list;
-//        list.add(1);
-//        list.add(3);
-//        list.add(5);
-//        list.add(8);
-//
-//        std::cout << list.size() << std::endl;
-//        list.remove(1);
-//        std::cout << list.size() << std::endl;
-//        list.print();
+    main_menu.add_option(8, "Test", [&loaded_matrix_graph, &loaded_list_graph] {
+        std::cout << "[#] Reprezenacja macierzowa" << std::endl;
+        for (ushort u = 0; u < loaded_matrix_graph->get_vertices(); ++u) {
+            std::cout << u << ": ";
+            loaded_matrix_graph->get_adjacent(u).print();
+            std::cout << std::endl;
+        }
+
+        std::cout << "[#] Reprezenacja listowa" << std::endl;
+        for (ushort u = 0; u < loaded_list_graph->get_vertices(); ++u) {
+            std::cout << u << ": ";
+            loaded_list_graph->get_adjacent(u).print();
+            std::cout << std::endl;
+        }
     });
     main_menu.add_option(9, "Zakoncz", [&main_menu] {
         std::cout << "[#] Koniec programu\n";

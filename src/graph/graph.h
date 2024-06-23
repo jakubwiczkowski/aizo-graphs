@@ -13,10 +13,10 @@ typedef unsigned short ushort;
  */
 class graph {
     ushort vertices; // liczba wierzchołków
-    ushort edges;    // liczba krawędzi
+    ulong edges;    // liczba krawędzi
 
 public:
-    graph(ushort vertices, ushort edges);
+    graph(ushort vertices, ulong edges);
     graph(ushort vertices, double fill, bool is_directed = false);
 
     /**
@@ -35,8 +35,18 @@ public:
      */
     virtual void remove_edge(ushort u, ushort v) = 0;
 
+    /**
+     * Zwraca ilość wierzchołków w grafie
+     *
+     * @return ilość wierzchołków w grafie
+     */
     [[nodiscard]] ushort get_vertices() const;
-    [[nodiscard]] ushort get_edges() const;
+    /**
+     * Zwraca ilość krawędzi w grafie
+     *
+     * @return ilość krawędzi w grafie
+     */
+    [[nodiscard]] ulong get_edges() const;
 
     /**
      * Sprawdza czy wierzchołki u i v są sąsiednie

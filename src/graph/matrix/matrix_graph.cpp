@@ -4,20 +4,20 @@
 #include <iomanip>
 #include "matrix_graph.h"
 
-matrix_graph::matrix_graph(ushort vertices, ushort edges, bool is_directed) : graph(vertices, edges) {
-    this->matrix = new int*[vertices];
+matrix_graph::matrix_graph(ushort vertices, ulong edges, bool is_directed) : graph(vertices, edges) {
+    this->matrix = new int *[vertices];
     for (int idx = 0; idx < vertices; idx++) {
         this->matrix[idx] = new int[edges];
         for (int jdx = 0; jdx < edges; jdx++) {
             this->matrix[idx][jdx] = 0;
         }
     }
-    this->adjacents = new list<ushort>[vertices];
     this->is_directed = is_directed;
 }
 
-matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) : matrix_graph(vertices,static_cast<ushort>(vertices * (vertices - 1) * fill / (is_directed ? 1 : 2)), is_directed) {
-    ushort added_edges = 0;
+matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) :
+              matrix_graph(vertices,static_cast<ulong>(vertices * (vertices - 1) * fill / (is_directed ? 1 : 2)), is_directed) {
+    ulong added_edges = 0;
     static std::random_device r;
     static std::default_random_engine e1(r());
     static std::uniform_int_distribution<int> uniform_dist_weight(1, 20);
@@ -42,7 +42,7 @@ matrix_graph::matrix_graph(ushort vertices, double fill, bool is_directed) : mat
         added_edges++;
     }
 
-    while(added_edges < this->get_edges()) {
+    while (added_edges < this->get_edges()) {
         std::uniform_int_distribution<ushort> uniform_dist(0, possible_edges.size() - 1);
 
         ushort idx = uniform_dist(e1);
@@ -67,7 +67,6 @@ matrix_graph::~matrix_graph() {
         delete[] this->matrix[idx];
     }
     delete[] this->matrix;
-    delete[] this->adjacents;
 }
 
 void matrix_graph::print() {
@@ -85,42 +84,51 @@ void matrix_graph::add_edge(ushort u, ushort v, int weight) {
     if (this->is_directed) {
         this->matrix[u][this->current_edge] = -weight;
         this->matrix[v][this->current_edge] = weight;
-        this->adjacents[u].add(v);
     } else {
         this->matrix[u][this->current_edge] = weight;
         this->matrix[v][this->current_edge] = weight;
-        this->adjacents[u].add(v);
-        this->adjacents[v].add(u);
     }
     this->current_edge++;
 }
 
 void matrix_graph::remove_edge(ushort u, ushort v) {
-//    this->matrix[u][v] = 0;
 }
 
 bool matrix_graph::is_adjacent(ushort u, ushort v) {
     if (u == v) return false;
 
-    for (int idx = 0; idx < this->get_edges(); idx++) {
-        if (this->matrix[u][idx] == 0 || this->matrix[v][idx] == 0)
-            continue;
-
-        if (this->is_directed) {
-            bool starts_at_u = this->matrix[u][idx] < 0;
-
-            if (!starts_at_u) continue;
-
-            return true;
-        } else {
-            return true;
-        }
-    }
-    return false;
+    return get_weight(u, v) != 0;
 }
 
 list<ushort> matrix_graph::get_adjacent(ushort u) {
-    return this->adjacents[u];
+    list<ushort> adjacent_edges;
+    if (this->is_directed) {
+        for (int idx = 0; idx < this->get_edges(); idx++) {
+            if (this->matrix[u][idx] == 0) continue;
+
+            if (this->matrix[u][idx] < 0) {
+                for (ushort v = 0; v < this->get_vertices(); v++) {
+                    if (v == u) continue;
+                    if (this->matrix[v][idx] == 0) continue;
+
+                    adjacent_edges.add(v);
+                }
+            }
+        }
+    } else {
+        for (int idx = 0; idx < this->get_edges(); idx++) {
+            if (this->matrix[u][idx] == 0) continue;
+
+            for (ushort v = 0; v < this->get_vertices(); v++) {
+                if (v == u) continue;
+                if (this->matrix[v][idx] == 0) continue;
+
+                adjacent_edges.add(v);
+            }
+        }
+    }
+
+    return adjacent_edges;
 }
 
 int matrix_graph::get_weight(ushort u, ushort v) {

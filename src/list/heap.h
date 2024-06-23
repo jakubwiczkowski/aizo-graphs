@@ -14,10 +14,29 @@ public:
 
     ~heap() = default;
 
+    /**
+     * Dodaje element do kopca minimalnego
+     *
+     * @param element element do dodania
+     */
     void add(T element) override;
+    /**
+     * Usuwa element o danym indeksie z kopca minimalnego
+     *
+     * @param index indeks elementu do usunięcia
+     */
     void remove(int index) override;
 
+    /**
+     * Tworzy kopiec minimalny
+     */
     void create_heap();
+    /**
+     * Naprawia kopiec w dół
+     *
+     * @param root indeks korzenia kopca
+     * @param end  indeks do którego kopiec ma być naprawiany
+     */
     void sift_down(int root, int end);
 
     static int index_parent(int index);

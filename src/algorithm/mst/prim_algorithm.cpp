@@ -6,15 +6,12 @@
 prim_result prim_algorithm::run(graph &graph, ushort start) {
     auto* in_mst = new ushort[graph.get_vertices()];
     auto* key = new int[graph.get_vertices()];
-
-//    list<ushort>* parent = new list<ushort>();
     auto* parent = new ushort[graph.get_vertices()];
 
     heap<vertex_prim> heap;
 
     for (ushort i = 0; i < graph.get_vertices(); i++) {
         in_mst[i] = 0;
-//        parent->set(i, -1);
         parent[i] = -1;
 
         if (i == start) {
@@ -34,7 +31,6 @@ prim_result prim_algorithm::run(graph &graph, ushort start) {
         for (ushort v = 0; v < graph.get_vertices(); v++) {
             int weight = graph.get_weight(u, v);
             if (graph.is_adjacent(u, v) && !in_mst[v] && weight < key[v]) {
-//                parent->set(v, u);
                 parent[v] = u;
                 int heap_idx = heap.find_index({v, key[v]});
                 heap.remove(heap_idx);
@@ -43,17 +39,6 @@ prim_result prim_algorithm::run(graph &graph, ushort start) {
             }
         }
     }
-
-//    if (print) {
-//        int weight = 0;
-//        for (ushort i = 0; i < graph.get_vertices(); i++) {
-//            if (i == start) continue;
-//
-//            std::cout << parent[i] << " -> " << i << " | " << graph.get_weight(parent[i], i) << std::endl;
-//            weight += graph.get_weight(parent[i], i);
-//        }
-//        std::cout << "Total weight: " << weight << std::endl;
-//    }
 
     delete[] in_mst;
     delete[] key;

@@ -16,6 +16,7 @@ public:
      * @param graph graf
      * @param start wierzchołek startowy
      * @param print czy wypisać wynik
+     * @return wynik algorytmu
      */
     virtual T run(graph& graph, ushort start) = 0;
 };

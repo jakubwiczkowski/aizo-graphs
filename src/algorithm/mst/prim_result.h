@@ -6,6 +6,9 @@
 
 #include "../result.h"
 
+/**
+ * Wynik algorytmu Prima.
+ */
 class prim_result : public result<ushort*> {
 public:
     explicit prim_result(ushort* data) : result(data) {}

@@ -5,7 +5,7 @@
 #include <ostream>
 
 /**
- * Wierzchołek grafu
+ * Wierzchołek grafu dla algorytmu Dijkstry.
  */
 struct vertex_dijkstra {
     ushort idx;

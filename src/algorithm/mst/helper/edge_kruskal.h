@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <ostream>
 
+/*
+ * Struktura reprezentująca krawędź w grafie, używana w algorytmie Kruskala.
+ */
 struct edge_kruskal {
     ushort src;
     ushort dest;

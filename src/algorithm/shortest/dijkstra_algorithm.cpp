@@ -45,25 +45,6 @@ dijkstra_result dijkstra_algorithm::run(graph &graph, ushort start) {
         }
     }
 
-//    if (print) {
-//        for (ushort i = 0; i < graph.get_vertices(); i++) {
-//            std::cout << "Path from " << start << " to " << i << " is: ";
-//            ushort end = i;
-//            if (path[end] == std::numeric_limits<ushort>::max()) {
-//                std::cout << "Path doesn't exist" << std::endl;
-//                continue;
-//            }
-//            while (end != start) {
-//                std::cout << end << " <- ";
-//                end = path[end];
-//            }
-//            std::cout << start;
-//            std::cout << " | Weight: " << dist[i] << std::endl;
-//        }
-//    }
-
-//    delete[] path;
-//    delete[] dist;
     delete[] visited;
 
     return dijkstra_result(new dijkstra_data{dist, path, start});

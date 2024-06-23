@@ -25,7 +25,6 @@ add_executable(aizo_graphs src/main.cpp
         src/algorithm/shortest/dijkstra_algorithm.h
         src/algorithm/shortest/fordbellman_algorithm.cpp
         src/algorithm/shortest/fordbellman_algorithm.h
-        src/list/pair.cpp
         src/list/pair.h
         src/list/list.cpp
         src/list/list.h

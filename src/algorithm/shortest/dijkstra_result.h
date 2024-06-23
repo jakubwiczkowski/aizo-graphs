@@ -7,6 +7,9 @@
 #include <limits>
 #include "../result.h"
 
+/**
+ * Struktura zawierająca wynik algorytmu Dijkstry.
+ */
 struct dijkstra_data {
     int* dist;
     ushort* path;
@@ -19,6 +22,9 @@ struct dijkstra_data {
 };
 
 
+/**
+ * Wynik algorytmu Dijkstry.
+ */
 class dijkstra_result : public result<dijkstra_data*> {
 public:
     explicit dijkstra_result(dijkstra_data* data) : result(data) {}

@@ -6,6 +6,9 @@
 
 #include "../result.h"
 
+/**
+ * Wynik algorytmu Kruskala.
+ */
 class kruskal_result : public result<edge_kruskal*> {
 public:
     explicit kruskal_result(edge_kruskal* data) : result(data) {}

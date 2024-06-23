@@ -10,12 +10,11 @@ class matrix_graph : public graph {
     // Macierz
     int** matrix;
 
-    list<ushort>* adjacents;
     int current_edge = 0;
     bool is_directed = false;
 public:
     matrix_graph(ushort vertices, double fill, bool is_directed = false);
-    matrix_graph(ushort vertices, ushort edges, bool is_directed = false);
+    matrix_graph(ushort vertices, ulong edges, bool is_directed = false);
     ~matrix_graph();
 
     void add_edge(ushort u, ushort v, int weight) override;

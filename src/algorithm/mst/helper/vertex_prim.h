@@ -6,7 +6,7 @@
 #include <cstdlib>
 
 /**
- * Wierzchołek grafu
+ * Wierzchołek grafu używany w algorytmie Prima.
  */
 struct vertex_prim {
     ushort idx;

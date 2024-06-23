@@ -20,17 +20,59 @@ public:
     list(const list<T> &other);
     ~list();
 
+    /**
+     * Zwraca ilość elementów listy
+     *
+     * @return ilość elementów listy
+     */
     int size();
 
+    /**
+     * Dodaje element do listy
+     *
+     * @param element element do dodania
+     */
     virtual void add(T element);
+    /**
+     * Zwraca referencje do obiektu w liście pod danym ideksem
+     *
+     * @param index indeks elementu
+     * @return referencja do obiektu danego elementu
+     */
     virtual T &get(int index);
+    /**
+     * Usuwa element pod danym indeksem
+     *
+     * @param index indeks elementu do usunięcia
+     */
     virtual void remove(int index);
 
+    /**
+     * Ustawia dany element na podanym indeksie.
+     *
+     * @param index   indeks do wstawiania elementu
+     * @param element element do wstawienia
+     */
     void set(int index, T element);
 
+    /**
+     * Znajduje indeks danego elementu
+     *
+     * @param element element, którego indeks chcemy znaleźć
+     * @return indeks elementu
+     */
     int find_index(T element);
+    /**
+     * Zamienia elementy miejscem
+     *
+     * @param first  miejsce pierwszego elementu
+     * @param second miejsce drugiego elementu
+     */
     void swap(int first, int second);
 
+    /**
+     * Wypisuje zawartość listy
+     */
     void print();
 
     T operator[](int idx) { return this->get(idx); }

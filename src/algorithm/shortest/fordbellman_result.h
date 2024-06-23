@@ -8,6 +8,9 @@
 #include <limits>
 #include "../result.h"
 
+/**
+ * Struktura zawierająca wynik algorytmu Bellmana-Forda.
+ */
 struct fordbellman_data {
     ushort* dist;
     ushort* path;
@@ -19,6 +22,9 @@ struct fordbellman_data {
     }
 };
 
+/**
+ * Wynik algorytmu Bellmana-Forda.
+ */
 class fordbellman_result : public result<fordbellman_data*> {
 public:
     explicit fordbellman_result(fordbellman_data* data) : result(data) {}

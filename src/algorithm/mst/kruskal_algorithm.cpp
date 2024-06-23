@@ -8,7 +8,6 @@ kruskal_result kruskal_algorithm::run(graph &graph, ushort start) {
     ushort vertices = graph.get_vertices();
     edge_kruskal* result = new edge_kruskal[vertices];
 
-//    list<edge_kruskal> result;
     list<edge_kruskal> edge_list;
 
     for (ushort u = 0; u < vertices; u++) {
@@ -40,20 +39,9 @@ kruskal_result kruskal_algorithm::run(graph &graph, ushort start) {
 
         if (x != y) {
             result[i++] = next_edge;
-//            result.add(next_edge);
-//            i++;
             union_set(parent, x, y);
         }
     }
-
-//    if (print) {
-//        int weight = 0;
-//        for (ushort idx = 0; idx < vertices - 1; idx++) {
-//            std::cout << result[idx].src << " -> " << result[idx].dest << " | " << result[idx].weight << std::endl;
-//            weight += result[idx].weight;
-//        }
-//        std::cout << "Total weight: " << weight << std::endl;
-//    }
 
     delete[] parent;
 

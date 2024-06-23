@@ -10,10 +10,8 @@
 class list_graph : public graph {
     // Lista list sąsiedztwa
     list<connection>** adjacency_list;
-
-    list<ushort>* adjacents;
 public:
-    list_graph(ushort vertices, ushort edges);
+    list_graph(ushort vertices, ulong edges);
     list_graph(ushort vertices, double fill, bool is_directed = false);
     list_graph(matrix_graph& matrix_graph);
 
